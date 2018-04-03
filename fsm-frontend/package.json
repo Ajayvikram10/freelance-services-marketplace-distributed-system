@@ -1,0 +1,38 @@
+{
+  "name": "fsm-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "filesize": "^3.6.0",
+    "history": "^4.6.3",
+    "moment": "^2.21.0",
+    "prop-types": "^15.5.10",
+    "query-string": "^6.0.0",
+    "react": "^16.2.0",
+    "react-contenteditable": "^2.0.7",
+    "react-datepicker": "^1.2.2",
+    "react-dom": "^16.2.0",
+    "react-dropzone": "^4.2.9",
+    "react-redux": "^5.0.5",
+    "react-responsive-modal": "^2.0.1",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-s-alert": "^1.4.1",
+    "react-scripts": "1.1.1",
+    "react-select-2": "^2.0.11",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.2"
+  }
+}

@@ -1,0 +1,326 @@
+html, body {
+    height: 100%;
+}
+
+.row {
+    height: inherit;
+}
+
+.main-content {
+    height: 100vh;
+    display: block;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #1f2836;
+    background: #F0F0F0;
+    box-sizing: border-box;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+.header-login-form {
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, .08), 0 2px 4px 0 rgba(0, 0, 0, .12);
+    border-radius: 3px;
+    background: #fff;
+    margin-top: 20px;
+    position: relative;
+    max-width: 390px !important;
+    /*height: 731.8px;*/
+}
+
+.header-login-form-child {
+
+    width: 100%;
+}
+
+/* Modal Header Start*/
+.modal-header {
+    border-bottom: 0;
+    padding: 10px 20px 10px 20px;
+    position: relative;
+    /*height: 19.131%;*/
+    /*height: 140px;*/
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.modal-header-logo {
+    margin: 3px 14px 2px;
+    border-bottom: 1px solid #F0F0F0;
+    text-align: center;
+    width: 322px;
+}
+
+.flicon-logo-fullcolor {
+    width: 196px;
+    height: 80px;
+    padding-bottom: 8px;
+    vertical-align: middle;
+    stroke-width: 0;
+}
+
+.modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 20px;
+    line-height: 1;
+    text-align: center;
+    width: 350px;
+}
+
+.modal-title-em {
+    width: 28.7167px;
+    height: 19px;
+    font-weight: normal;
+}
+/* Modal Header End*/
+
+
+/* Modal Body Start*/
+.modal-body {
+    max-height: none;
+    overflow-y: inherit;
+    padding: 20px 36px;
+    position: relative;
+    /*height: 71.1675%;*/
+    /*height: 520.8px;*/
+    width: 100%;
+}
+
+.large-form {
+    font-size: 16px;
+    margin-top: 20.26%;
+}
+
+.form-step {
+    padding-bottom: 20px;
+    position: relative;
+    margin-bottom: 0 !important;
+    animation-duration: .4s;
+    animation-fill-mode: both;
+    animation-name: fadeIn;
+    width: 316px;
+}
+
+.large-input {
+    font-size: 16px;
+    height: 46px;
+    padding: 0 16px;
+}
+
+.looking-for-step {
+    padding-bottom: 20px;
+    position: relative;
+    margin-bottom: 0 !important;
+    animation-duration: .4s;
+    animation-fill-mode: both;
+    animation-name: fadeIn;
+    width: 316px;
+    height: 53px;
+}
+
+.button-group {
+    display: block;
+    position: relative;
+    height: 33px;
+}
+
+.btn:hover {
+    text-decoration: none;
+    background: #F0F0F0;
+    color: #4D525B;
+    transition: ease-in;
+}
+
+.signup-objective-label {
+    width: 50%;
+    white-space: nowrap;
+    height: inherit;
+    color: rgb(77, 82, 91);
+    text-shadow: rgba(0, 0, 0, 0) 0px -1px 0px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 0px;
+    padding: 8px 18px 8px 18px;
+    position: relative;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(rgb(255, 255, 255) 0px, rgb(240, 240, 240) 100%);
+    background-origin: padding-box;
+    background-position: 0% 0%;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-top-color: rgb(190, 192, 194);
+    border-right-color: rgb(190, 192, 194);
+    border-bottom-color: rgb(190, 192, 194);
+    border-left-color: rgb(190, 192, 194);
+}
+
+.signup-objective-label-left {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 0px;
+    font-weight: 700;
+    margin-right: 0px;
+}
+
+.signup-objective-radio-left {
+    font-weight: inherit;
+    margin-left: -7px;
+    margin-right: 7px;
+    margin-top: 2px;
+    vertical-align: top;
+    z-index: 1;
+}
+
+.signup-objective-label-right {
+    border-top-right-radius: 3px;
+    border-top-left-radius: 0px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 0px;
+    font-weight: 400;
+    margin-left: -1px;
+}
+
+.signup-objective-radio-right {
+    margin-left: -7px;
+    margin-right: 7px;
+    margin-top: 2px;
+    vertical-align: top;
+    z-index: 1;
+}
+
+.btn {
+    cursor: pointer;
+    display: inline-block;
+    line-height: 18px;
+    text-align: center;
+}
+
+.btn-info {
+    border: 1px solid #0087e0;
+    font-weight: 500;
+    text-shadow: 0 -1px transparent;
+}
+
+.btn-info:hover {
+    background: #0087e0;
+    color: #F7F7F7;
+    transition: ease-in;
+}
+
+.btn-large {
+    padding: 13px 22px;
+    font-size: 1.25rem;
+    border-radius: 3px;
+}
+
+.btn-large:hover {
+    text-decoration: none;
+}
+
+.btn-create-account {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(rgb(19, 159, 240) 0px, rgb(0, 135, 224) 100%);
+    background-origin: padding-box;
+    background-position: 0% 0%;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto auto;
+    color: rgb(247, 247, 247);
+
+}
+
+.login-form-signup-terms {
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 15px;
+    font-size: 13px;
+    line-height: 15.6px;
+}
+
+.small {
+    font-size: .8125rem;
+    line-height: 1.2;
+}
+/* Modal Body End*/
+
+/* Modal Footer Start*/
+.modal-footer {
+    /*height: 9.704%;*/
+    /*height: 71px;*/
+    padding: 10px 20px 20px;
+    border-top: none;
+    background: none transparent;
+    margin-bottom: 0;
+    text-align: right;
+    border-radius: 0 0 6px 6px;
+    width: 100%;
+}
+
+.login-form-signup-link {
+    width: inherit;
+    display: block;
+    padding-top: 20px;
+    border-top: 1px solid #F0F0F0;
+    line-height: 20px;
+    text-align: center;
+}
+/* Modal Footer End*/
+
+/*General Start*/
+.a-tag {
+    color: #0087e0 !important;
+    outline-color: rgb(19, 159, 240) !important;
+    outline-style: none !important;
+    outline-width: 0px !important;
+    cursor: pointer;
+    text-decoration: none;
+    text-decoration-color: rgb(19, 159, 240);
+    text-decoration-line: none;
+}
+
+a:hover {
+    outline: 0;
+    text-decoration: underline !important;
+    color: #139ff0;
+    transition: color .1s ease-out;
+    background-color: transparent;
+}
+
+button, select {
+    text-transform: none;
+}
+
+button, input {
+    overflow: visible;
+}
+/*General End*/
+
+/*Errors Start*/
+.form-step-has-error {
+    border-color: #eb3730;
+    color: #eb3730;
+}
+
+.signup-form-error {
+    display: block;
+    animation-duration: .4s;
+    animation-fill-mode: both;
+    animation-name: fadeInDown;
+    margin: 5px 0;
+    color: #eb3730;
+}
+
+.alert-btm {
+    margin-bottom: -16px;
+}
+/*Errors End*/
