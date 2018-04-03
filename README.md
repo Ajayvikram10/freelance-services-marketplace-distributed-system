@@ -13,10 +13,29 @@ Front-end:
   3. HTML5 
   4. CSS3 
   5. Bootstrap 
+     
+     Steps to Run:
+          1. npm install
+          2. npm start
 
-Back-end: 
+Middleware: 
   1. Node.js 
   2. Express.js
   3. Apache Kafka
   4. Passport.js
-  5. MongoDB
+  5. MongoDB (session data)
+
+     Steps:
+          1. npm install
+          2. nodemon
+  
+Back-end: 
+  1. Node.js 
+  2. Apache Kafka
+  3. MongoDB (application data)
+
+     Steps:
+          1. npm install
+          2. run mongodb -> mongod
+          3. create topics. run zookeeper and kafka
+          2. npm start
