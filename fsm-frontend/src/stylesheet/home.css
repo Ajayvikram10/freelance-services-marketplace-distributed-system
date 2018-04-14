@@ -16,6 +16,7 @@
 
 .row-height {
     max-height: 220px;
+    margin-bottom: 2.5%;
 }
 
 .panel-welcome{
@@ -150,6 +151,7 @@
 }
 
 .row-size {
+    margin-top: 7%;
     margin-right: 102px;
     margin-left: 48px
 }
@@ -186,14 +188,29 @@
 }
 
 #hm-bid-now-btn {
-    background-color: #0087e0;
-    font-size: 17px;
-    background: linear-gradient(to bottom,#139ff0 0,#0087e0 100%);
-    background-image: linear-gradient(rgb(19, 159, 240) 0px, rgb(0, 135, 224) 100%);
+    display: none;
+    background: rgb(79, 181, 93);
+    border: 1px solid #4fb55d;
+    color: #F7F7F7;
+    font-size: 13px !important;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(rgb(93, 194, 106) 0px, rgb(79, 181, 93) 100%);
     border: 1px solid #bec0c2;
     border-radius: 3px;
     border-color: rgba(0, 0, 0, 0);
-    color: #f7f7f7;
+}
+
+.btn-display:hover #hm-bid-now-btn {
+    display: block;
+    background: rgb(79, 181, 93);
+    border: 1px solid #4fb55d;
+    color: #F7F7F7;
+    font-size: 17px;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: linear-gradient(rgb(93, 194, 106) 0px, rgb(79, 181, 93) 100%);
+    border: 1px solid #bec0c2;
+    border-radius: 3px;
+    border-color: rgba(0, 0, 0, 0);
 }
 
 .li-fl-logo {
@@ -276,4 +293,209 @@
     text-transform: uppercase;
     text-align: left;
     color: #F7F7F7;
+}
+
+.bottom-width {
+    /*width: 1260px;*/
+}
+
+.pagination-tr:hover {
+    background-color: #ffffff;
+}
+
+.pagination {
+    box-sizing: border-box;
+    color: rgb(31, 40, 54);
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 19.6px;
+    margin: 10px 0px 10px 0px;
+    padding: 20px;
+    text-align: center
+}
+
+.pagination-item {
+    box-sizing: border-box;
+    color: rgb(31, 40, 54);
+    display: inline;
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 19.6px;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    text-align: center;
+}
+
+.pagination-item-link {
+    background-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(221, 221, 221);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(221, 221, 221);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgb(221, 221, 221);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgb(221, 221, 221);
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-sizing: border-box;
+    color: #0087e0 !important;
+    cursor: pointer;
+    float: left;
+    font-size: 14px;
+    line-height: 20px;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    padding-bottom: 4px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 4px;
+    text-align: center;
+    text-decoration: none !important;
+    text-decoration-color: rgb(0, 135, 224);
+    text-decoration-style: solid;
+    transition-delay: 0s;
+    transition-duration: 0.1s;
+    transition-property: color;
+    transition-timing-function: ease-out;
+}
+
+.pagination-item-link:active {
+    text-decoration: none !important;
+}
+
+.pagination-item-link:hover {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: default;
+    text-decoration: none !important;
+}
+
+.home-no-project {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: rgb(255, 255, 255);
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0% 0%;
+    background-position-x: 0%;
+    background-position-y: 0%;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-collapse: collapse;
+    border-spacing: 0px 0px;
+    box-sizing: content-box;
+    color: rgb(31, 40, 54);
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    height: 266.867px;
+    line-height: 20.0167px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 4px;
+    text-align: left
+}
+
+.home-no-project-h4 {
+    border-collapse: collapse;
+    border-spacing: 0px 0px;
+    box-sizing: content-box;
+    color: rgb(31, 40, 54);
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center;
+}
+
+.projects-toggle {
+    float: right;
+    display: inline-block;
+    /*height: 40px;*/
+    border: 1px solid #BEC0C2;
+    border-radius: 30px;
+}
+
+.flip-height {
+    height: 0 !important;
+    justify-content: center;
+}
+
+/* SEARCH Bar*/
+.ul-list-style {
+    list-style-type: none;
+    margin-bottom: 0px;
+}
+
+.search-style {
+    padding-left: 0px !important;
+}
+
+/* Search */
+.search-container {
+    width: 360px;
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    max-height: 100%;
+    align-items: center;
+    color: #1f2836;
+}
+
+
+.search-inner-container {
+    width: inherit;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 1.43;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #bec0c2;
+    border-radius: 3px;
+    color: #1f2836;
+    display: flex;
+    overflow: hidden;
+    transition: all .2s ease-out;
+}
+
+.search-inner-container:hover {
+    border-color: #139ff0;
+    color: #1f2836;
+}
+
+
+.search-icon {
+    margin-right: 4px;
+    display: inline-block;
+    height: 18px;
+    position: relative;
+    vertical-align: middle;
+    width: 24px;
+}
+
+.search-bar {
+    border: 0px solid rgba(0,0,0,.15);
 }

@@ -206,6 +206,7 @@ tr:hover {
     margin-bottom: 5%;
     border: 1px solid #BEC0C2;
     border-radius: 30px;
+    margin-left: 50px;
 }
 
 .db-radio-input {
@@ -365,4 +366,11 @@ tr:hover {
     border-color: #0087e0 !important;
     color: #0087e0 !important;
     text-decoration: none !important;
+}
+
+.center-search {
+    float: inline-start;
+    margin-bottom: 58.8px;
+    margin-left: 12%;
+    margin-top: 58.8px;
 }
