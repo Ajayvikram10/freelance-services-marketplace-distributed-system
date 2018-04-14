@@ -2,13 +2,15 @@ import React, {Component}   from 'react';
 import { connect }          from "react-redux";
 import freeLogo             from '../../images/freelancer.logos/fl-logo.svg';
 import plusIcon             from '../../images/freelancer.logos/plus_icon.png';
-import uploadIcon             from '../../images/freelancer.logos/upload_file.png';
-import { mainProjectActions }   from '../../redux/actions/project/main.project.actions';
+import uploadIcon           from '../../images/freelancer.logos/upload_file.png';
+import { projectDispatch }  from '../../redux/actions/project/project.dispatch';
 import DatePicker           from 'react-datepicker';
 import moment               from 'moment';
 import Dropzone             from 'react-dropzone';
 import filesize             from 'filesize';
 import { history }          from "../../helper/history";
+import {projectWebService}  from "../../services/project.services";
+import Alert                from "react-s-alert";
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../stylesheet/post-project.css';
 
@@ -23,91 +25,67 @@ class PostProject extends Component {
             projectSkills       : '',
             projectPay          : '',
             projectFiles        : [],
-            selectPay           : 'fixedPay',
-            completeByDate      : moment(),
-            isSubmitted         : false,
-            isOpen              : false,
-            isUploaded          : false,
+            payType             : 'fixedPay',
+            dueDate             : moment(),
+            isFormSubmitted     : false,
+            isCalendarOpen      : false,
+            isFileUploaded      : false,
         }
     }
 
-    handleChange = (event) => {
-
-        const { name, value }   = event.target;
-        this.setState({
-             [name]: value
-        });
-    }
-
-    handleToggle = (event) => {
+    handlePayToggle = (event) => {
 
         this.setState({
-            selectPay : event.target.value
+            payType : event.target.value
         });
-    }
-
-    handleDateChange = (date) => {
-        this.setState({
-            completeByDate: date
-        });
-        this.toggleCalendar();
-    }
-
-    toggleCalendar=  (e) => {
-        e && e.preventDefault();
-        this.setState({isOpen: !this.state.isOpen})
-    }
+    };
 
     onDrop = (acceptedFiles, rejectedFiles) => {
 
-        var projectFiles = this.state.projectFiles;
+        let projectFiles = this.state.projectFiles;
         projectFiles.push(acceptedFiles);
         this.setState({
             projectFiles: projectFiles,
-            isUploaded : true
+            isFileUploaded : true
         });
-    }
+    };
 
     handleDeleteFile = (event) => {
 
         event.preventDefault();
 
-        var fileName = event.target.value;
-        var oldProjectFiles = this.state.projectFiles;
-        var newProjectFiles = [];
+        let fileName = event.target.value;
+        let oldProjectFiles = this.state.projectFiles;
+        let newProjectFiles = [];
         for(let position = 0; position < oldProjectFiles.length; position++) {
             if (oldProjectFiles[position][0].name === fileName) {
                 newProjectFiles = oldProjectFiles.splice(position, 1);
             }
         }
 
-        this.setState({ isSubmitted: false });
+        this.setState({ isFormSubmitted: false });
 
         if(!newProjectFiles) {
             this.setState({
                projectFiles : newProjectFiles
             });
         }
-    }
+    };
 
     handlePostProject = (event) => {
 
         event.preventDefault();
 
-        this.setState({ isSubmitted: true });
+        this.setState({ isFormSubmitted: true });
 
         let name    = this.state.projectName;
         let desc    = this.state.projectDescription;
         let skills  = this.state.projectSkills;
         let pay     = this.refs.projectPay.value;
-        let date    = this.state.completeByDate.format("YYYY-MM-DD");
+        let date    = this.state.dueDate.format("YYYY-MM-DD");
         let file    = this.state.projectFiles;
 
-        skills = skills.split(' ').join(', ');
-        if(skills.trim().startsWith(','))
-            skills = skills.slice(1, skills.length);
-        if(skills.trim().endsWith(','))
-            skills = skills.slice(0, skills.length - 1);
+        skills = skills.trim().split(",");
 
         if (name && desc && skills) {
 
@@ -129,11 +107,11 @@ class PostProject extends Component {
             this.props.postProject(project);
             history.push("/home");
         }
-    }
+    };
 
     uploadFiles = (files) => {
         const uploadFiles = new FormData();
-        var filenames = "";
+        let filenames = "";
         for (let index = 0; index < files.length; index++) {
             if(index === files.length-1) {
                 filenames = filenames.concat(files[index][0].name);
@@ -143,12 +121,48 @@ class PostProject extends Component {
             }
             uploadFiles.append("file", files[index][0]);
         }
-        this.props.uploadFiles(uploadFiles);
+
+
+        projectWebService.uploadFile(uploadFiles)
+            .then(
+                response => {
+                    console.log(response.data.message);
+                    Alert.info(response.data.message, {
+                        effect: 'jelly',
+                        timeout: 1500,
+                        offset: 50
+                    });
+                },
+                error => {
+                    console.log(error);
+                }
+            );
+
         return filenames;
-    }
+    };
+
+    handleDueDateChange = (date) => {
+        this.setState({
+            dueDate: date
+        });
+        this.toggleCalendarDisplay();
+    };
+
+    toggleCalendarDisplay =  (e) => {
+        e && e.preventDefault();
+        this.setState({isCalendarOpen: !this.state.isCalendarOpen})
+    };
+
+    handleFieldChange = (event) => {
+
+        const { name, value }   = event.target;
+        this.setState({
+            [name]: value
+        });
+    };
 
     render() {
-        const { projectName, projectDescription, projectSkills, projectFiles, selectPay, isSubmitted, completeByDate, isOpen, isUploaded } = this.state;
+        const { projectName, projectDescription, projectSkills, projectFiles, payType, isFormSubmitted, dueDate, isCalendarOpen, isFileUploaded } = this.state;
 
         return(
             <div className="container-fluid main-content-pp">
@@ -185,17 +199,17 @@ class PostProject extends Component {
                                             <ol className="pp-form">
                                                 <li className="form-step">
                                                     <input
-                                                        className={`form-control pp-field-input large-input` + (isSubmitted && !projectName ? ' form-step-has-error' : '')}
+                                                        className={`form-control pp-field-input large-input` + (isFormSubmitted && !projectName ? ' form-step-has-error' : '')}
                                                         name        = "projectName"
                                                         // ref         = "projectName"
                                                         type        = "text"
                                                         value       = { projectName }
-                                                        onChange    = { this.handleChange }
+                                                        onChange    = { this.handleFieldChange }
                                                         label       = "ProjectName"
                                                         placeholder = "e.g. Build me a website"
                                                     />
                                                     {
-                                                        isSubmitted && !projectName &&
+                                                        isFormSubmitted && !projectName &&
                                                         <div className="form-error pp-form-error" >
                                                             Please enter a project name.
                                                         </div>
@@ -219,17 +233,17 @@ class PostProject extends Component {
                                             <ol className="pp-form">
                                                 <li className="form-step">
                                                     <textarea
-                                                        className   = { `form-control pp-field-input large-textarea` + (isSubmitted && !projectDescription ? ' form-step-has-error' : '') }
+                                                        className   = { `form-control pp-field-input large-textarea` + (isFormSubmitted && !projectDescription ? ' form-step-has-error' : '') }
                                                         name        = "projectDescription"
                                                         // ref         = "projectDescription"
                                                         value       = { projectDescription }
-                                                        onChange    = { this.handleChange }
+                                                        onChange    = { this.handleFieldChange }
                                                         type        = "text"
                                                         label       = "ProjectDescription"
                                                         placeholder = "Describe your project here..."
                                                     />
                                                     {
-                                                        isSubmitted && !projectDescription &&
+                                                        isFormSubmitted && !projectDescription &&
                                                         <div className="form-error pp-form-error" >
                                                             Please enter a project description.
                                                         </div>
@@ -252,7 +266,7 @@ class PostProject extends Component {
                                                             </p>
                                                         </Dropzone>
                                                         {
-                                                            isUploaded &&
+                                                            isFileUploaded &&
                                                             <table className="table-upload">
                                                                 <tbody className="table-upload-body">
                                                                 {
@@ -307,17 +321,17 @@ class PostProject extends Component {
                                             <ol className="pp-form">
                                                 <li className="form-step">
                                                     <input
-                                                        className   = { `form-control pp-field-input large-input` + (isSubmitted && !projectDescription ? ' form-step-has-error' : '') }
+                                                        className   = { `form-control pp-field-input large-input` + (isFormSubmitted && !projectDescription ? ' form-step-has-error' : '') }
                                                         name        = "projectSkills"
                                                         // ref         = "projectSkills"
                                                         value       = { projectSkills }
-                                                        onChange    = { this.handleChange }
+                                                        onChange    = { this.handleFieldChange }
                                                         type        = "text"
                                                         label       = "ProjectSkills"
                                                         placeholder = "What skills are required?"
                                                     />
                                                     {
-                                                        isSubmitted && !projectSkills &&
+                                                        isFormSubmitted && !projectSkills &&
                                                         <div className="form-error pp-form-error" >
                                                             Please enter up to 5 project skills.
                                                         </div>
@@ -340,10 +354,10 @@ class PostProject extends Component {
                                                             className   = "Radio-input"
                                                             name        = "fixedPay"
                                                             value       = "fixedPay"
-                                                            checked     = { selectPay === 'fixedPay'}
+                                                            checked     = { payType === 'fixedPay'}
                                                             type        = "radio"
                                                             label       = "ProjectFixedPay"
-                                                            onChange    = { this.handleToggle }
+                                                            onChange    = { this.handlePayToggle }
                                                         />
                                                         <label htmlFor="budgetFixed" className="Radio-label Radio-label--large Radio-label--tab pp-radio-label">
                                                             <span className="Radio-text-label">
@@ -357,10 +371,10 @@ class PostProject extends Component {
                                                             className   = "Radio-input"
                                                             name        = "hourlyPay"
                                                             value       = "hourlyPay"
-                                                            checked     = { selectPay === 'hourlyPay'}
+                                                            checked     = { payType === 'hourlyPay'}
                                                             type        = "radio"
                                                             label       = "ProjectHourlyPay"
-                                                            onChange    = { this.handleToggle }
+                                                            onChange    = { this.handlePayToggle }
                                                         />
                                                         <label htmlFor="budgetHourly" className="Radio-label Radio-label--large Radio-label--tab pp-radio-label">
                                                             <span className="Radio-text-label">
@@ -373,7 +387,7 @@ class PostProject extends Component {
                                             <legend className="form-fieldset-legend">What is your estimated budget?</legend>
                                             <ol className="budgetFields">
                                                 {
-                                                    selectPay === 'fixedPay' &&
+                                                    payType === 'fixedPay' &&
                                                     <li className="form-step form-step--multiFields">
                                                         <div className="form-step-fieldContainer">
                                                             <select defaultValue="USD"
@@ -454,7 +468,7 @@ class PostProject extends Component {
                                                     </li>
                                                 }
                                                 {
-                                                    selectPay === 'hourlyPay' &&
+                                                    payType === 'hourlyPay' &&
                                                     <li className="form-step form-step--multiFields">
                                                         <div className="form-step-fieldContainer">
                                                             <select defaultValue="USD"
@@ -524,15 +538,15 @@ class PostProject extends Component {
                                         <div>
                                             <button
                                                 className = "btn-date"
-                                                onClick   = { this.toggleCalendar }>
-                                                { completeByDate.format("DD-MM-YYYY") }
+                                                onClick   = { this.toggleCalendarDisplay }>
+                                                { dueDate.format("DD-MM-YYYY") }
                                             </button>
                                             {
-                                                isOpen && (
+                                                isCalendarOpen && (
                                                     <DatePicker
-                                                        selected = { completeByDate }
-                                                        onChange = { this.handleDateChange }
-                                                        onClickOutside = { this.toggleCalendar }
+                                                        selected = { dueDate }
+                                                        onChange = { this.handleDueDateChange }
+                                                        onClickOutside = { this.toggleCalendarDisplay }
                                                         withPortal
                                                         inline />
                                                 )
@@ -577,8 +591,7 @@ class PostProject extends Component {
 
 function mapDispatchToProps(dispatch) {
     return {
-        postProject : (project) => dispatch(mainProjectActions.postProject(project)),
-        uploadFiles : (file)    => dispatch(mainProjectActions.uploadFile(file))
+        postProject : (project) => dispatch(projectDispatch.postProject(project))
     };
 }
 

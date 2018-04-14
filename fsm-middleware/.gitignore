@@ -9,6 +9,10 @@
 # production
 /build
 
+#public - images and files
+/public/profile_images
+/public/project_files
+
 # misc
 *.idea
 .DS_Store

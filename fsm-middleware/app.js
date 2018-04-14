@@ -12,16 +12,6 @@ let mongoSessionURL = "mongodb://localhost:27017/sessions";
 let expressSessions = require("express-session");
 let mongoStore      = require("connect-mongo/es5")(expressSessions);
 
-// Middleware
-// let { authenticate }    = require('./resources/middleware/session-authenticator');
-// const { uploadProjectFiles, uploadProfileImage } = require('./resources/middleware/file.storage');
-
-// Application Routes.
-let index               = require('./routes/index');
-let userController      = require('./routes/userController');
-// var projectController   = require('./routes/projectController');
-// var profileController   = require('./routes/profileController');
-
 // Express App
 const app = express();
 
@@ -55,39 +45,18 @@ app.use(expressSessions({
 app.use(passport.initialize());
 app.use(passport.session()); //persistent login session
 
+// React Application Routes and Requests - < http://localhost:3001 >
+let index               = require('./routes/index');
+let userController      = require('./routes/userController');
+let projectController   = require('./routes/projectController');
+let profileController   = require('./routes/profileController');
 
-// Default Route
 app.use('/'         , index);
 app.use('/users'    , userController);
-// app.use('/profile'  , profileController);
-// app.use('/project'  , projectController);
-
-// React Frontend Requests - < http://localhost:3001 >
-// User Controller
-// POST
-// app.post('/register', userController.registerUser);
-// app.post('/login', userController.loginUser);
-// app.post('/logout', authenticate, userController.logoutUser);
-// app.post('/authenticateUser', authenticate, userController.authenticateUser);
-
-
-// Profile Controller
-// POST
-// app.post('/profile/save-profile-image', uploadProfileImage.any(), authenticate, profileController.uploadProfImage);
-// app.post('/profile/update-phone', authenticate, profileController.updatePhone);
-// app.post('/profile/update-name', authenticate, profileController.updateName);
-// app.post('/profile/update-summary', authenticate, profileController.updateSummary);
-// app.post('/profile/update-aboutme', authenticate, profileController.updateAboutMe);
-// app.post('/profile/update-skills', authenticate, profileController.updateSkills);
-// GET
-// app.get('/profile-image', authenticate, profileController.fetchProfileImage);
-// app.get('/profile/visitor', authenticate, profileController.fetchOtherUserDetails);
-//
+app.use('/project'  , projectController);
+app.use('/profile'  , profileController);
 // Project Controller
 // POST
-// app.post('/project/post-project', authenticate, projectController.postProject);
-// app.post('/project/post-project/upload', authenticate, uploadProjectFiles.any(), projectController.uploadFile);
-// app.post('/project/open-projects', authenticate, projectController.openProjects);
 // app.post('/project/bid-details', authenticate, projectController.bidDetails);
 // app.post('/project/hire-freelancer', authenticate, projectController.hireFreelancer);
 // app.post('/project/post-bid', authenticate, projectController.postBid);
@@ -96,7 +65,6 @@ app.use('/users'    , userController);
 // app.get('/project/bid-projects', authenticate, projectController.bidProjects);
 // app.get('/project/project-details', authenticate, projectController.projectDetails);
 // app.get('/project/bid-header-details', authenticate, projectController.bidHeaderDetails);
-
 
 // Catch 404 and Forward to Error Handler
 app.use(function(req, res, next) {

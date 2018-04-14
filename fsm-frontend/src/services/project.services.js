@@ -1,4 +1,4 @@
-import axios                from 'axios';
+import axios    from 'axios';
 
 const backendURL = 'http://localhost:3000';
 
@@ -8,6 +8,7 @@ export const projectWebService = {
     postProject,
     uploadFile,
     openProjectsWS,
+    relevantProjectsWS,
     userPublishedDetailsWS,
     userBidDetailsWS,
     fetchProjectBidDetailsWS,
@@ -15,11 +16,26 @@ export const projectWebService = {
     fetchBidHeaderDetailsWS,
     hireFreelancerWS,
     postBidWS
-}
+};
 
 function postProject (project) {
     let postProjectUrl   = backendURL + '/project/post-project';
     return axiosPost(postProjectUrl, project);
+}
+
+function uploadFile (file) {
+    let uploadFileUrl   = backendURL + '/project/post-project/upload';
+    return axiosPost(uploadFileUrl, file);
+}
+
+function openProjectsWS (user) {
+    let openProjectsUrl   = backendURL + '/project/open-projects';
+    return axiosPost(openProjectsUrl, user);
+}
+
+function relevantProjectsWS (userSkills) {
+    let relevantProjectsUrl   = backendURL + '/project/relevant-projects';
+    return axiosPost(relevantProjectsUrl, userSkills);
 }
 
 function hireFreelancerWS (data) {
@@ -45,16 +61,6 @@ function fetchProjectDetailsWS(projectId) {
 function fetchBidHeaderDetailsWS(projectId) {
     let bidHeaderDetailsUrl   = backendURL + '/project/bid-header-details?projectId=' + projectId;
     return axiosGet(bidHeaderDetailsUrl);
-}
-
-function uploadFile (file) {
-    let uploadFileUrl   = backendURL + '/project/post-project/upload';
-    return axiosPost(uploadFileUrl, file);
-}
-
-function openProjectsWS (project) {
-    let openProjectsUrl   = backendURL + '/project/open-projects';
-    return axiosPost(openProjectsUrl, project);
 }
 
 function userPublishedDetailsWS (username) {

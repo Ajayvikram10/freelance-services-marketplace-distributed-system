@@ -1,16 +1,14 @@
 import { projectWebService }    from "../../../services/project.services";
 import { alertActions }         from "../alert/alert.actions";
-import { projectActions }       from "./project.action";
 import Alert                    from 'react-s-alert';
 import '../../../stylesheet/alert-style/jelly.css'
 
-export const mainProjectActions = {
+export const projectDispatch = {
     postProject,
     uploadFile,
-    openProjectsAction,
     userPublishedDetailsAction,
     userBidDetailsAction
-}
+};
 
 
 function postProject (project) {
@@ -35,24 +33,6 @@ function postProject (project) {
     };
 }
 
-function openProjectsAction () {
-
-    return dispatch => {
-
-        projectWebService.openProjectsWS()
-            .then(
-                response => {
-                    console.log(response.data.projects);
-                    console.log(response.data.message);
-                    dispatch(projectActions.openProjectsR(response.data.projects));
-                },
-                error => {
-                    console.log(error.data.message);
-                }
-            );
-    };
-}
-
 function userPublishedDetailsAction(username) {
 
     return projectWebService.userPublishedDetailsWS(username)
@@ -66,9 +46,6 @@ function userPublishedDetailsAction(username) {
                     userPublishedProjects.publishedDetailsStatus = true;
                 }
                 userPublishedProjects.publishedDetails = response.data.publishedDetails;
-
-                console.log(userPublishedProjects.publishedDetails);
-                console.log(userPublishedProjects.publishedDetailsStatus);
 
                 return userPublishedProjects;
             },
@@ -91,9 +68,6 @@ function userBidDetailsAction(userId) {
                     userBidProjects.bidDetailsStatus = true;
                 }
                 userBidProjects.bidDetails = response.data.bidDetails;
-
-                console.log(userBidProjects.bidDetails);
-                console.log(userBidProjects.bidDetailsStatus);
 
                 return userBidProjects;
             },
