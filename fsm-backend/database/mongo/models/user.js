@@ -10,7 +10,7 @@ var UserSchema = new Schema({
     summary     : { type: String, trim: true, default: '' },
     phone       : { type: String, trim: true, default: '' },
     about_me    : { type: String, trim: true, default: '' },
-    skills      : { type: String, trim: true, default: '' },
+    skills      : [ { type: String } ],
     looking_for : { type: String, trim: true, default: '' }
 });
 
