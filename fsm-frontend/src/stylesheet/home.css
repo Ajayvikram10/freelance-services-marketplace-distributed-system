@@ -486,7 +486,6 @@
     color: #1f2836;
 }
 
-
 .search-icon {
     margin-right: 4px;
     display: inline-block;
@@ -498,4 +497,14 @@
 
 .search-bar {
     border: 0px solid rgba(0,0,0,.15);
+}
+
+.freelancer-toggle-home {
+    float: right;
+    display: inline-block;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border: 1px solid #BEC0C2;
+    border-radius: 30px;
+    margin-left: 50px;
 }

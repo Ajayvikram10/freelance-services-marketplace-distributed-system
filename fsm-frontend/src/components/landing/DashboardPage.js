@@ -3,6 +3,8 @@ import { connect }          from 'react-redux';
 import { history }          from "../../helper/history";
 import NavBar               from '../../helper/navbar';
 import {projectDispatch}    from "../../redux/actions/project/project.dispatch";
+import Select               from 'react-select';
+import 'react-select/dist/react-select.css';
 import '../../stylesheet/dashboard.css'
 
 class DashboardPage extends Component {
@@ -21,6 +23,7 @@ class DashboardPage extends Component {
             bidDetailsCurrentPage   : 1,
             bidDetailsStatus        : false,
             flipView                : 'EMPLOYER',
+            filterValue             : ''
         }
     };
 
@@ -60,7 +63,6 @@ class DashboardPage extends Component {
 
             let filterIndex = 0;
             for (let index = 0; index < publishedDetails.length; index++) {
-                // if (publishedDetails[index].title.includes(searchParam)) {
                 if ((new RegExp(searchParam, 'i')).test(publishedDetails[index].title)) {
                     console.log(publishedDetails[index]);
                     console.log(publishedDetails[index].title);
@@ -119,13 +121,66 @@ class DashboardPage extends Component {
         history.push(projectPage + "?project_id=" + project_id);
     }
 
-    handleSubmit(nextPage, e) {
-        history.push(nextPage);
-    }
+    onStatusChange = (filterValue) => {
+
+        this.setState({ filterValue: filterValue ? filterValue.value : "" });
+
+        const flipView = this.state.flipView;
+
+        if(filterValue) {
+
+            let filtered_array = [];
+            if(flipView === 'EMPLOYER') {
+
+                this.setState({ publishedCurrentPage: 1 });
+                const { publishedDetails } = this.state;
+
+                let filterIndex = 0;
+                for (let index = 0; index < publishedDetails.length; index++) {
+                    if (filterValue.value === publishedDetails[index].status) {
+                        console.log(publishedDetails[index]);
+                        console.log(publishedDetails[index].title);
+                        filtered_array[filterIndex++] = publishedDetails[index];
+                    }
+                }
+                if (filtered_array.length > 0) {
+                    this.setState( { publishedDetailsDisplay: filtered_array } );
+                }
+                else {
+                    this.setState( { publishedDetailsDisplay : [] } );
+                }
+            }
+            else if (flipView === 'FREELANCER') {
+
+                this.setState({ bidDetailsCurrentPage: 1 });
+                const { bidDetails } = this.state;
+
+                let filterIndex = 0;
+                for (let index = 0; index < bidDetails.length; index++) {
+                    if (filterValue.value === bidDetails[index].status) {
+                        filtered_array[filterIndex++] = bidDetails[index];
+                    }
+                }
+                if (filtered_array.length > 0)
+                    this.setState( { bidDetailsDisplay : filtered_array } );
+                else {
+                    this.setState( { bidDetailsDisplay : [] } );
+                }
+            }
+        } else {
+            if(flipView === 'EMPLOYER') {
+                const { publishedDetails } = this.state;
+                this.setState( { publishedDetailsDisplay : publishedDetails } );
+            } else if (flipView === 'FREELANCER') {
+                const { bidDetails } = this.state;
+                this.setState( { bidDetailsDisplay : bidDetails } );
+            }
+        }
+    };
 
     render() {
 
-        const { publishedDetailsStatus, publishedCurrentPage,
+        const { publishedDetailsStatus, publishedCurrentPage, filterValue,
                 publishedDetailsDisplay, bidDetailsStatus, bidDetailsCurrentPage,
                 bidDetailsDisplay, flipView, projectsPerPage } = this.state;
 
@@ -184,64 +239,82 @@ class DashboardPage extends Component {
 
                 <div className="db-container">
                     <div className="db-main-content">
-                        <div>
+                        <div className="row search-filter-row">
+                            <div className="col-md-3 db-title-container p-0">
                             {
                                 (flipView === 'EMPLOYER') &&
                                 <h1 className="db-title">Published Projects</h1>
                             }
                             {
                                 (flipView === 'FREELANCER') &&
-                                <h1 className="db-title">You have Bid on</h1>
+                                <h1 className="db-title">You have <br/>Bid on</h1>
                             }
-
-                            <div className="ul-list-style search-style center-search">
-                                <div className="search-container">
-                                    <div className="search-inner-container">
-                                        <span className="search-icon fa fa-search fa-lg"></span>
-                                        <input
-                                            placeholder="Search Project name ..."
-                                            ref={input => this.search = input}
-                                            className="form-control search-bar"
-                                            onChange={this.handleSearch.bind(this)}
-                                        />
+                            </div>
+                            <div className="col-md-3 p-0">
+                                <div className="ul-list-style search-style center-search">
+                                    <div className="search-container center-search-dashboard">
+                                        <div className="search-inner-container">
+                                            <span className="search-icon fa fa-search fa-lg"></span>
+                                            <input
+                                                placeholder="Search Project name ..."
+                                                ref={input => this.search = input}
+                                                className="form-control search-bar"
+                                                onChange={this.handleSearch.bind(this)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="freelancer-toggle">
-                                <input
-                                    id="employerOption"
-                                    className="db-radio-input"
-                                    name="EMPLOYER"
-                                    value="EMPLOYER"
-                                    checked={flipView === 'EMPLOYER'}
-                                    type="radio"
-                                    label="DashboardEmployer"
-                                    onChange={this.onFlip}
+                            <div className="col-md-3 p-0">
+                                <Select
+                                    name        = "form-field-name"
+                                    className   = "dropdown-tag"
+                                    placeholder = "Select Project status"
+                                    value       = { filterValue }
+                                    onChange    = { this.onStatusChange }
+                                    options     = {[
+                                        { value: 'OPEN', label: 'OPEN' },
+                                        { value: 'ASSIGNED', label: 'ASSIGNED' },
+                                        { value: 'CLOSED', label: 'CLOSED' }
+                                    ]}
                                 />
-                                <label
-                                    className={flipView === 'EMPLOYER' ? 'db-radio-label-on' : 'db-radio-label-off'}
-                                    htmlFor="employerOption"
-                                >
-                                    Employer
-                                </label>
+                            </div>
+                            <div className="col-md-3 p-0">
+                                <div className="freelancer-toggle-dashboard">
+                                    <input
+                                        id="employerOption"
+                                        className="db-radio-input"
+                                        name="EMPLOYER"
+                                        value="EMPLOYER"
+                                        checked={flipView === 'EMPLOYER'}
+                                        type="radio"
+                                        label="DashboardEmployer"
+                                        onChange={this.onFlip}
+                                    />
+                                    <label
+                                        className={flipView === 'EMPLOYER' ? 'db-radio-label-on' : 'db-radio-label-off'}
+                                        htmlFor="employerOption"
+                                    >
+                                        Employer
+                                    </label>
 
-                                <input
-                                    id="freelancerOption"
-                                    className="db-radio-input"
-                                    name="FREELANCER"
-                                    value="FREELANCER"
-                                    checked={flipView === 'FREELANCER'}
-                                    type="radio"
-                                    label="DashboardFreelancer"
-                                    onChange={this.onFlip}
-                                />
-                                <label
-                                    className={flipView === 'FREELANCER' ? 'db-radio-label-on' : 'db-radio-label-off'}
-                                    htmlFor="freelancerOption"
-                                >
-                                    Freelancer
-                                </label>
+                                    <input
+                                        id="freelancerOption"
+                                        className="db-radio-input"
+                                        name="FREELANCER"
+                                        value="FREELANCER"
+                                        checked={flipView === 'FREELANCER'}
+                                        type="radio"
+                                        label="DashboardFreelancer"
+                                        onChange={this.onFlip}
+                                    />
+                                    <label
+                                        className={flipView === 'FREELANCER' ? 'db-radio-label-on' : 'db-radio-label-off'}
+                                        htmlFor="freelancerOption"
+                                    >
+                                        Freelancer
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -326,7 +399,7 @@ class DashboardPage extends Component {
                                                     <tr>
                                                         <td className="home-no-project" colSpan="6">
                                                             <h4 className="home-no-project-h4">
-                                                                No results matches your search
+                                                                No results match your search or filter
                                                             </h4>
                                                         </td>
                                                     </tr>

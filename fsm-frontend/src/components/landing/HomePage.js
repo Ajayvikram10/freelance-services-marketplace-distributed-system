@@ -235,7 +235,7 @@ class HomePage extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="freelancer-toggle">
+                            <div className="freelancer-toggle-home">
                                 <input
                                     id="allProjectsOption"
                                     className="db-radio-input"
