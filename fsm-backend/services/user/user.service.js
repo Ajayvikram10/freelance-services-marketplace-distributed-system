@@ -39,9 +39,8 @@ function handle_register_request(registrationInfo, callback){
 }
 
 // Login
-function handle_login_request(logInfo, callback){
+function handle_login_request(loginInfo, callback){
 
-    let loginInfo = _.pick(logInfo, ['username', 'password']);
     let result = {};
 
     User.findByCredentials(loginInfo)
@@ -77,7 +76,7 @@ function handle_authenticate_request(userInfo, callback){
         if (err) console.log(err);
         if (user) {
             if(!user) {
-                // User was found.
+                // User was not found.
                 result.code = 404;
                 result.value = responseJSON("INVALID_user");
                 callback(null, result);
@@ -92,7 +91,7 @@ function handle_authenticate_request(userInfo, callback){
     });
 }
 
-// Response messages.
+// User Response messages.
 function responseJSON(responseType) {
     switch (responseType) {
         case "INVALID_session":

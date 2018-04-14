@@ -1,12 +1,12 @@
-const multer            = require('multer');
-const fs                = require('fs');
-var path                = require('path');
-var   mainDirectory     = "public/project_files/";
-var   profileDirectory  = "public/profile_images/";
+const      multer           = require('multer');
+const        fs             = require('fs');
+const       path            = require('path');
+const   projectDirectory    = "public/project_files/";
+const   profileDirectory    = "public/profile_images/";
 
 var projectStorage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, createDirectory(req.session.user));
+        callback(null, createDirectory(projectDirectory, req.session.user));
     },
     filename: function (req, file, callback) {
         callback(null, file.originalname);
@@ -17,7 +17,7 @@ exports.uploadProjectFiles = multer({
     storage:projectStorage
 });
 
-function createDirectory(username) {
+function createDirectory(mainDirectory, username) {
 
     if (!fs.existsSync(mainDirectory)){
         fs.mkdirSync(mainDirectory);
@@ -33,7 +33,7 @@ function createDirectory(username) {
 var profileStorage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-        cb(null, profileDirectory);
+        cb(null, createDirectory(profileDirectory, req.session.user));
     },
     filename: function (req, file, cb) {
         filename = req.session.user + path.extname(file.originalname);

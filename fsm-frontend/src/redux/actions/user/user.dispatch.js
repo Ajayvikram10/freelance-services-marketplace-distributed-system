@@ -1,13 +1,16 @@
 import { userWebService }       from "../../../services/user.services";
+import { profileWebService }    from "../../../services/profile.services";
 import { alertActions }         from "../alert/alert.actions";
 import { history }              from "../../../helper/history";
 import { userActions }          from "./user.action";
+import {projectActions} from "../project/project.action";
 
 export const userDispatch = {
     register,
     login,
     logout,
-    authenticateUser
+    authenticateUser,
+    updateInfo
 };
 
 function register (user) {
@@ -53,6 +56,7 @@ function logout () {
             .then(
                 response => {
                     dispatch(userActions.logoutSuccess());
+                    dispatch(projectActions.clearProjects());
                     dispatch(alertActions.logoutSuccess(response.data.message));
                     history.push('/login');
                 },
@@ -68,6 +72,22 @@ function authenticateUser () {
     return dispatch => {
 
         userWebService.authenticateUserWS()
+            .then(
+                response => {
+                    dispatch(userActions.updateUser(response.data.user));
+                },
+                error => {
+                    console.log(error.data.message);
+                }
+            );
+    };
+}
+
+function updateInfo(updateInfo) {
+
+    return dispatch => {
+
+        profileWebService.updateProfile(updateInfo)
             .then(
                 response => {
                     dispatch(userActions.updateUser(response.data.user));

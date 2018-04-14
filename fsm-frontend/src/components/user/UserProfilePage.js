@@ -2,10 +2,11 @@ import React, {Component}   from 'react';
 import { connect }          from 'react-redux';
 import profile_image        from '../../images/profile/profile-image.png';
 import NavBar               from '../../helper/navbar';
-import { userWebService }   from "../../services/user.services";
+import { profileWebService }from "../../services/profile.services";
 import Modal                from 'react-responsive-modal';
 import Dropzone             from 'react-dropzone';
 import '../../stylesheet/profile.css';
+import {userDispatch} from "../../redux/actions/user/user.dispatch";
 
 class UserProfilePage extends Component {
 
@@ -13,98 +14,51 @@ class UserProfilePage extends Component {
         super(props);
 
         this.state = {
-            isEdit: false,
-            aboutMe: this.props.userDetails.user.about_me,
-            aboutMeSaved: this.props.userDetails.user.about_me,
-            aboutMeEdit: false,
-            summary: this.props.userDetails.user.summary,
-            summarySaved: this.props.userDetails.user.summary,
-            summaryEdit: false,
-            name: this.props.userDetails.user.name,
-            nameSaved: this.props.userDetails.user.name,
-            nameEdit: false,
-            phone: this.props.userDetails.user.phone,
-            phoneSaved: this.props.userDetails.user.phone,
-            phoneEdit: false,
-            profileImage: "",
-            skills : this.props.userDetails.user.skills,
-            skillsSaved : (!this.props.userDetails.user.skills ? [] : this.props.userDetails.user.skills.split(',')),
-            modalIsOpen: false,
-            openImageModal: false,
-            isUploaded          : false,
+            isEdit          : false,
+            aboutMe         : this.props.userDetails.user.about_me,
+            aboutMeSaved    : this.props.userDetails.user.about_me,
+            aboutMeEdit     : false,
+            summary         : this.props.userDetails.user.summary,
+            summarySaved    : this.props.userDetails.user.summary,
+            summaryEdit     : false,
+            name            : this.props.userDetails.user.name,
+            nameSaved       : this.props.userDetails.user.name,
+            nameEdit        : false,
+            phone           : this.props.userDetails.user.phone,
+            phoneSaved      : this.props.userDetails.user.phone,
+            phoneEdit       : false,
+            profileImage    : "",
+            skills          : this.props.userDetails.user.skills,
+            skillsSaved     : (!this.props.userDetails.user.skills ? [] : this.props.userDetails.user.skills),
+            modalIsOpen     : false,
+            openImageModal  : false,
+            isUploaded      : false,
             previewImage    : [],
-            openSkillModal: false,
+            openSkillModal  : false,
         };
     }
 
     componentWillMount(){
-        this.fetchProfileImage();
+        // this.fetchProfileImage();
     }
 
-    handleProfileImage = (event) => {
-
-        event.preventDefault();
-
-        this.setState({ profileImage : this.state.previewImage[0][0] });
-
-        var profileImageData = new FormData();
-        profileImageData.append('file', this.state.previewImage[0][0]);
-
-        userWebService.uploadProfileImageWS(profileImageData).then(
-            () => {
-                this.fetchProfileImage();
-            });
-
-        this.onCloseImageModal();
-    };
-
-    fetchProfileImage(){
-        const user  = this.props.userDetails.user;
-        userWebService.fetchProfileImageWS(user.username).then((response) => {
-            this.setState( { profileImage : response.data.profileImage }) ;
-        });
-    }
-
-    onDrop = (acceptedFiles, rejectedFiles) => {
-
-        var previewImages = this.state.previewImage;
-        previewImages.splice(0,1);
-        previewImages.push(acceptedFiles);
-        this.setState({
-            previewImage: previewImages,
-            isUploaded : true
-        });
-    }
-
-
-    onOpenImageModal = () => {
-        this.setState({ openImageModal: true });
-    };
-
-    onOpenSkillModal = () => {
-        this.setState({ openSkillModal: true });
-    };
-
-    onCloseImageModal = () => {
-        this.setState({ openImageModal: false, previewImage: [] });
-    };
-
-    onCloseSkillModal = () => {
-        this.setState({ openSkillModal: false });
-    };
-
-    handleChangePhone = (event) => {
-
-        this.setState({
-            phone: event.target.value
-        });
-    };
-
-    handleChangeName = (event) => {
+    handleNameChange = (event) => {
 
         this.setState({
             name: event.target.value
         });
+    };
+    toggleEditName = (event) => {
+        this.setState({
+            nameEdit: !this.state.nameEdit
+        });
+    };
+    saveName = (event) => {
+        this.setState({
+            nameSaved: this.state.name,
+            nameEdit: false
+        });
+        this.props.updateInfo({ field : "name", value : this.state.name });
     };
 
     handleSummaryChange = (event) => {
@@ -113,13 +67,108 @@ class UserProfilePage extends Component {
             summary: event.target.value
         });
     };
+    toggleEditSummary = (event) => {
+        this.setState({
+            summaryEdit: !this.state.summaryEdit
+        });
+    };
+    saveSummary = (event) => {
+        this.setState({
+            summarySaved: this.state.summary,
+            summaryEdit: false
+        });
+        this.props.updateInfo({ field : "summary", value : this.state.summary });
+    };
 
-    handleChangeAboutMe = (event) => {
+    handleAboutMeChange = (event) => {
 
         this.setState({
             aboutMe: event.target.value
         });
     };
+    toggleEditAboutMe = (event) => {
+        this.setState({
+            aboutMeEdit: !this.state.aboutMeEdit
+        });
+    };
+    saveAboutMe = (event) => {
+        this.setState({
+            aboutMeSaved: this.state.aboutMe,
+            aboutMeEdit: false
+        });
+        this.props.updateInfo({ field : "about_me", value : this.state.aboutMe });
+    };
+
+    onOpenSkillModal = () => { this.setState({ openSkillModal: true }); };
+    onCloseSkillModal = () => { this.setState({ openSkillModal: false }); };
+    saveSkills = (event) => {
+        event.preventDefault();
+
+        let skillsArr = [];
+        if(this.refs.skills.value.trim().length > 0) {
+            skillsArr = this.refs.skills.value.trim().split(',');
+        }
+        this.setState({
+            skillsSaved: skillsArr
+        });
+        this.onCloseSkillModal();
+        this.props.updateInfo({ field : "skills", value : skillsArr });
+    };
+
+    handlePhoneChange = (event) => {
+
+        this.setState({
+            phone: event.target.value
+        });
+    };
+    toggleEditPhone = (event) => {
+        this.setState({
+            phoneEdit: !this.state.phoneEdit
+        });
+    };
+    savePhone = (event) => {
+        this.setState({
+            phoneSaved: this.state.phone,
+            phoneEdit: false
+        });
+        this.props.updateInfo({ field : "phone", value : this.state.phone });
+    };
+
+    onOpenImageModal = () => { this.setState({ openImageModal: true }); };
+    onCloseImageModal = () => { this.setState({ openImageModal: false, previewImage: [] }); };
+    onDrop = (acceptedFiles, rejectedFiles) => {
+
+        let previewImages = this.state.previewImage;
+        previewImages.splice(0,1);
+        previewImages.push(acceptedFiles);
+        this.setState({
+            previewImage: previewImages,
+            isFileUploaded : true
+        });
+    };
+    handleProfileImage = (event) => {
+
+        event.preventDefault();
+
+        this.setState({ profileImage : this.state.previewImage[0][0] });
+
+        let profileImageData = new FormData();
+        profileImageData.append('file', this.state.previewImage[0][0]);
+
+        profileWebService.uploadProfileImageWS(profileImageData)
+            .then( () => {
+                this.setState({ profileImage : this.state.previewImage[0][0] });
+            });
+
+        this.onCloseImageModal();
+    };
+
+    fetchProfileImage(){
+        const user  = this.props.userDetails.user;
+        profileWebService.fetchProfileImageWS(user.username).then((response) => {
+            this.setState( { profileImage : response.data.profileImage }) ;
+        });
+    }
 
     toggleViewEditBtn = (event) => {
         this.setState({
@@ -127,81 +176,14 @@ class UserProfilePage extends Component {
         });
     };
 
-    toggleEditPhone = (event) => {
-        this.setState({
-            phoneEdit: !this.state.phoneEdit
-        });
-    };
-
-    toggleEditName = (event) => {
-        this.setState({
-            nameEdit: !this.state.nameEdit
-        });
-    };
-
-    toggleEditAboutMe = (event) => {
-        this.setState({
-            aboutMeEdit: !this.state.aboutMeEdit
-        });
-    };
-
-    toggleEditSummary = (event) => {
-        this.setState({
-            summaryEdit: !this.state.summaryEdit
-        });
-    };
-
-    savePhone = (event) => {
-        this.setState({
-            phoneSaved: this.state.phone,
-            phoneEdit: false
-        });
-        userWebService.updatePhoneDetailsWS({ phone : this.state.phone });
-    };
-
-    saveName = (event) => {
-        this.setState({
-            nameSaved: this.state.name,
-            nameEdit: false
-        });
-        userWebService.updateNameDetailsWS({ name : this.state.name });
-    };
-
-    saveSummary = (event) => {
-        this.setState({
-            summarySaved: this.state.summary,
-            summaryEdit: false
-        });
-        userWebService.updateSummaryWS({ summary : this.state.summary });
-    };
-
-    saveAboutMe = (event) => {
-        this.setState({
-            aboutMeSaved: this.state.aboutMe,
-            aboutMeEdit: false
-        });
-        userWebService.updateAboutMeWS({ aboutme : this.state.aboutMe });
-    };
-
-    saveSkills = (event) => {
-        event.preventDefault();
-        let skillsArr = this.refs.skills.value.split(',');
-        this.setState({
-            skillsSaved: skillsArr
-        });
-        this.onCloseSkillModal();
-        userWebService.updateSkillsWS({ skills : this.refs.skills.value });
-    };
-
     render() {
 
         const user  = this.props.userDetails.user;
         const { isEdit, aboutMeEdit, summaryEdit, profileImage, nameEdit, phoneEdit } = this.state;
-        var imgSrc = profileImage ? 'data:image/jpeg;base64,' + profileImage : profile_image;
 
         return (
             <div className="main-content">
-                <NavBar searchAllowed={false} currentPage={"profile"}/>
+                <NavBar currentPage={"profile"}/>
                 <div className="profile-info">
                     <div className="container-info">
                         <div className="grid-info">
@@ -212,8 +194,8 @@ class UserProfilePage extends Component {
                                             <div className="profile-avatar-image-uploader">
                                                 <div className="profile-avatar-image-wrapper">
                                                     <div className="profile-avatar-image-done">
-                                                        <img className="avatar-image" src={imgSrc} alt="Profile"/>
-                                                        <a className="picture-upload-trigger" href="#" onClick={ this.onOpenImageModal }>
+                                                        <img className="avatar-image" src={ profileImage ?  URL.createObjectURL(profileImage) : `/profile_images/${user.username}/${user.username}.jpg`} alt="Profile" onError={ (e)=>{ e.target.src = profile_image } }/>
+                                                        <a className="picture-upload-trigger" onClick={ this.onOpenImageModal }>
                                                             <span className="picture-upload-trigger-inner fa fa-camera">
                                                                 <span className="picture-upload-trigger-text">Edit profile picture</span>
                                                             </span>
@@ -250,7 +232,7 @@ class UserProfilePage extends Component {
                                                     <input
                                                         defaultValue={this.state.phone}
                                                         disabled={false}
-                                                        onChange={this.handleChangePhone}
+                                                        onChange={this.handlePhoneChange}
                                                         className="profile-phone-text"
                                                         placeholder="Phone Number"
                                                     />
@@ -295,7 +277,7 @@ class UserProfilePage extends Component {
                                                     <input
                                                         defaultValue={this.state.name}
                                                         disabled={false}
-                                                        onChange={this.handleChangeName}
+                                                        onChange={this.handleNameChange}
                                                         className="profile-name-text"
                                                         placeholder="Full Name"
                                                         />
@@ -375,7 +357,7 @@ class UserProfilePage extends Component {
                                                 <textarea
                                                     defaultValue={this.state.aboutMe}
                                                     disabled={false}
-                                                    onChange={this.handleChangeAboutMe}
+                                                    onChange={this.handleAboutMeChange}
                                                     className="profile-about-textarea"
                                                     placeholder="Tell us a bit about yourself"
                                                     name="aboutMe"
@@ -453,11 +435,11 @@ class UserProfilePage extends Component {
                     <div className="pf-modal-content">
                         <form ref = "projectForm" className="skills-form">
                             <h3 className="pf-modal-title" id="exampleModalLabel">
-                                <span className="pf-modal-text">Add your skills</span>
+                                <span className="pf-modal-text">Add your skills separated by comma</span>
                             </h3>
                             <div className="pf-modal-body-skills">
                                     <textarea className="pf-summary-textarea" ref="skills"
-                                              placeholder="Enter your top skills seperated by comma"
+                                              placeholder="Enter your top skills separated by comma"
                                               defaultValue={this.state.skillsSaved}
                                               name="skillsText">
                                     </textarea>
@@ -486,14 +468,14 @@ class UserProfilePage extends Component {
 
                                 <div>
                                     {
-                                        !this.state.isUploaded &&
+                                        !this.state.isFileUploaded &&
                                         <span className="pf-text-pad">Drag your picture here or click in this area.</span>
                                     }
 
                                     {
-                                        this.state.isUploaded &&
+                                        this.state.isFileUploaded &&
                                         this.state.previewImage.map((data, index) =>
-                                            <img key={index} className="pf-avatar-image" id='img-upload' alt="Upload" src={URL.createObjectURL(data[0])}/>
+                                            <img key={index} className="pf-avatar-image" id='img-upload' alt="Upload" src={ URL.createObjectURL(data[0]) }/>
                                         )
                                     }
                                 </div>
@@ -518,4 +500,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(UserProfilePage);
+function mapDispatchToProps(dispatch) {
+    return {
+        updateInfo    : (updateInfo) => dispatch(userDispatch.updateInfo(updateInfo)),
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserProfilePage);

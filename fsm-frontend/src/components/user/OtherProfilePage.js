@@ -1,8 +1,8 @@
-import React            from "react";
-import profile_image    from '../../images/profile/profile-image.png';
-import { connect }      from "react-redux";
-import {userWebService} from "../../services/user.services";
-import NavBar           from "../../helper/navbar";
+import React                    from "react";
+import profile_image            from '../../images/profile/profile-image.png';
+import { connect }              from "react-redux";
+import { profileWebService }    from "../../services/profile.services";
+import NavBar                   from "../../helper/navbar";
 import '../../stylesheet/other-profile.css'
 
 class OtherProfilePage extends React.Component {
@@ -23,13 +23,13 @@ class OtherProfilePage extends React.Component {
     }
 
     fetchProfileImage(username){
-        userWebService.fetchProfileImageWS(username).then((response) => {
+        profileWebService.fetchProfileImageWS(username).then((response) => {
             this.setState( { profileImage : response.data.profileImage }) ;
         });
     }
 
     fetchOtherUserDetails(username){
-        userWebService.fetchOtherUserDetailsWS(username).then((response) => {
+        profileWebService.fetchOtherUserDetailsWS(username).then((response) => {
             this.setState({profileUser : response.data.user})
         });
     }
@@ -39,13 +39,13 @@ class OtherProfilePage extends React.Component {
 
         let profileSkills = [];
         if(profileUser.skills)
-            profileSkills = profileUser.skills.split(',');
+            profileSkills = profileUser.skills;
 
         let imgSrc = profileImage ? 'data:image/jpeg;base64,' + profileImage : profile_image;
 
         return (
             <div className="main-content">
-                <NavBar searchAllowed={false} currentPage={"profile"}/>
+                <NavBar currentPage={"profile"}/>
                 <div className="profile-info">
                     <div className="container-info">
                         <div className="grid-info">

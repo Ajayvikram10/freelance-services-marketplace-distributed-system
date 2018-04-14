@@ -12,7 +12,6 @@ function updateUser(user) {
     };
 }
 
-
 function logoutSuccess() {
     return {
         type    : userConstants.USER_LOGOUT_SUCCESS,

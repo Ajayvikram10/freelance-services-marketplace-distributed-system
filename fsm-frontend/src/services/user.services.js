@@ -8,16 +8,8 @@ export const userWebService = {
     registerWS,
     loginWS,
     logoutWS,
-    authenticateUserWS,
-    fetchProfileImageWS,
-    uploadProfileImageWS,
-    updatePhoneDetailsWS,
-    updateNameDetailsWS,
-    updateSummaryWS,
-    updateAboutMeWS,
-    updateSkillsWS,
-    fetchOtherUserDetailsWS
-}
+    authenticateUserWS
+};
 
 function registerWS (user) {
     let registerUrl = backendURL + '/users/register';
@@ -39,54 +31,8 @@ function authenticateUserWS () {
     return axiosPost(authenticateUserUrl, null);
 }
 
-function fetchProfileImageWS(username) {
-    let profileImageUrl   = backendURL + '/profile-image?username=' + username;
-    return axiosGet(profileImageUrl);
-}
-
-function fetchOtherUserDetailsWS (username) {
-    let otherUserUrl   = backendURL + '/profile/visitor?username=' + username;
-    return axiosGet(otherUserUrl);
-}
-
-function updatePhoneDetailsWS (phone) {
-    let updatePhoneUrl   = backendURL + '/profile/update-phone';
-    return axiosPost(updatePhoneUrl, phone);
-}
-
-function updateNameDetailsWS (name) {
-    let updateNameUrl   = backendURL + '/profile/update-name';
-    return axiosPost(updateNameUrl, name);
-}
-
-function updateSummaryWS (summary) {
-    let updateSummaryUrl   = backendURL + '/profile/update-summary';
-    return axiosPost(updateSummaryUrl, summary);
-}
-
-function updateAboutMeWS (aboutme) {
-    let updateAboutMeUrl   = backendURL + '/profile/update-aboutme';
-    return axiosPost(updateAboutMeUrl, aboutme);
-}
-
-function updateSkillsWS (skills) {
-    let updateSkillsUrl   = backendURL + '/profile/update-skills';
-    return axiosPost(updateSkillsUrl, skills);
-}
-
-function uploadProfileImageWS (profileImage) {
-    let uploadProfileImgUrl   = backendURL + '/profile/save-profile-image';
-    return axiosPost(uploadProfileImgUrl, profileImage);
-}
-
 function axiosPost(url, data) {
    return axios.post(url, data)
-        .then(handleSuccess)
-        .catch(handleError);
-}
-
-function axiosGet(url) {
-    return axios.get(url)
         .then(handleSuccess)
         .catch(handleError);
 }

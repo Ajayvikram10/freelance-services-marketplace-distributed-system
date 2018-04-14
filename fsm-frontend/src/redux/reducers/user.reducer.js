@@ -10,6 +10,7 @@ export function userDetails(state = initialState, action) {
     switch (action.type) {
         case userConstants.USER_AUTH_SUCCESS:
             return {
+                ...state,
                 isAuthenticated: !!action.user,
                 user: action.user
             };

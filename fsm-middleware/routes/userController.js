@@ -35,13 +35,13 @@ router.post('/login', function (req, res) {
                     return res.status(500).send(responseJSON("SERVER_someError"));
             }
         }
-        console.log(results.user.username);
-        req.login(results.user.username, function (err) { if(err) console.log(err); });
-        req.session.user = results.user.username;
-        console.log("Session Initialized \n Req Session: " + req.session.user + " Req Passport: " + req.session.passport);
-
+        req.login(results.user.username, function (err) {
+            if(err) {
+                console.log(err);
+            }
+            req.session.user = results.user.username;
+        });
         res.status(200).send(results);
-
     })(req, res);
 });
 
