@@ -23,10 +23,11 @@ export const userConstants = {
     LOGOUT: 'USERS_LOGOUT',
 
     CLEAR: 'ALERT_CLEAR'
-}
+};
 
 export const projectConstants = {
 
-    OPEN_PROJECTS: 'OPEN_PROJECTS'
+    OPEN_PROJECTS: 'OPEN_PROJECTS',
 
-}
+    CLEAR_PROJECTS: 'CLEAR_PROJECTS'
+};

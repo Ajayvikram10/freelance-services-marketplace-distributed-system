@@ -15,7 +15,7 @@ class NavBar extends Component {
     handleLogout = (e) => {
         e.preventDefault();
         this.props.logout();
-    }
+    };
 
 
     render() {
@@ -38,35 +38,24 @@ class NavBar extends Component {
                             <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
                                 <li
                                     onClick = { this.handleNavSubmit.bind(this, "/home") }
-                                    className={`nav-item nv-itm ` + (currentPage === 'home') ? `is-active` :``}
+                                    className={`nav-item nv-itm ` + (currentPage === 'home' ? 'is-active' :'' )}
                                 >
                                     <span className="nav-link nv-link">Home</span>
                                 </li>
 
                                 <li
                                     onClick = { this.handleNavSubmit.bind(this, "/dashboard") }
-                                    className={`nav-item nv-itm ` + (currentPage === 'dashboard') ? `is-active` :``}
+                                    className={`nav-item nv-itm ` + (currentPage === 'dashboard' ? 'is-active' :'' )}
                                 >
                                     <span className="nav-link nv-link">Dashboard</span>
                                 </li>
                                 <li
                                     onClick = { this.handleNavSubmit.bind(this, "/profile") }
-                                    className={`nav-item nv-itm ` + (currentPage === 'profile') ? `is-active` :``}
+                                    className={`nav-item nv-itm ` + (currentPage === 'profile' ? 'is-active' :'' )}
                                 >
                                     <span className="nav-link nv-link">Profile</span>
                                 </li>
                             </ul>
-                            {
-                                this.props.searchAllowed &&
-                                <ul className="ul-list-style search-style">
-                                    <li className="search-container">
-                                        <div className="search-inner-container">
-                                            <span className="search-icon fa fa-search fa-lg"></span>
-                                            <input/>
-                                        </div>
-                                    </li>
-                                </ul>
-                            }
                             <ul className="ul-list-style">
                                 <li className="nb-btn">
                                     <button type="button" className = "pap-link"

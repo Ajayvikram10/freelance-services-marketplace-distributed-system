@@ -28,7 +28,7 @@ class App extends Component {
 
         history.listen((location, action) => {
             // clear alert on location change
-            // this.props.clearAlert();
+            this.props.clearAlert();
         });
     }
 
