@@ -57,9 +57,9 @@ app.use('/project'  , projectController);
 app.use('/profile'  , profileController);
 // Project Controller
 // POST
-// app.post('/project/bid-details', authenticate, projectController.bidDetails);
+
 // app.post('/project/hire-freelancer', authenticate, projectController.hireFreelancer);
-// app.post('/project/post-bid', authenticate, projectController.postBid);
+
 // GET
 // app.get('/project/published-projects', authenticate, projectController.publishedProjects);
 // app.get('/project/bid-projects', authenticate, projectController.bidProjects);

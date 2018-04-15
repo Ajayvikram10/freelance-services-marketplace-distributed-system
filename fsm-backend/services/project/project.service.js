@@ -1,4 +1,5 @@
-const Project = require('../../database/mongo/models/project');
+const Project   = require('../../database/mongo/models/project');
+const mongoose  = require('../../database/mongo/mongoose');
 
 // Post Project
 function handle_post_project(projectInfo, callback) {
@@ -243,6 +244,220 @@ function handle_bid_project(bidProjectFetch, callback) {
     });
 }
 
+// Fetch Bids Details
+function handle_get_bids_project(getBids, callback) {
+
+    let result = {};
+
+    let pipeline = [
+        {
+            "$match": {
+                "_id": new mongoose.mongo.ObjectId(getBids.projectId)
+            }
+        },
+        {
+            "$project": {
+                "bids": 1.0
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$bids",
+                "preserveNullAndEmptyArrays": true
+            }
+        }
+    ];
+
+    let promise = Project.aggregate(pipeline);
+
+    promise.then(function (data) {
+        console.log("project_BidDetails.js data-");
+        console.log(data);
+        result.value = { bidDetails: data, message: "Bid Details fetched." };
+        if (data) {
+            result.code = 200;
+            callback(null, result);
+        }
+    }).catch(function (err) {
+        // just need one of these
+        console.log('error:', err.message);
+        result.value    = responseJSON("SERVER_someError");
+        result.code     = '400';
+        callback(err, result);
+    });
+}
+
+// Fetch Project Details
+function handle_project_details(projDetails, callback) {
+
+    let result = {};
+
+    let pipeline = [
+        {
+            "$match": {
+                "_id": new mongoose.mongo.ObjectId(projDetails.projectId)
+            }
+        },
+        {
+            "$addFields": {
+                "bid_count": {
+                    "$size": { "$ifNull": [ "$bids", [] ] }
+                }
+            }
+        },
+        {
+            "$unwind": {
+                "path": "$bids",
+                "preserveNullAndEmptyArrays": true
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "id"                    : "$_id",
+                    "title"                 : "$title",
+                    "complete_by"           : "$complete_by",
+                    "status"                : "$status",
+                    "freelancer_username"   : "$freelancer_username",
+                    "emp_username"          : "$emp_username",
+                    "budget_range"          : "$budget_range",
+                    "skills_req"            : "$skills_req",
+                    "description"           : "$description",
+                    "filenames"             : "$filenames",
+                    "bid_count"				: "$bid_count",
+                    "freelancer_files"      : "$freelancer_files"
+                },
+                "avg_bid": {
+                    "$avg": "$bids.bid_price"
+                }
+            }
+        }
+    ];
+
+    let promise = Project.aggregate(pipeline).exec();
+
+    promise.then(function (data) {
+        console.log("project_details.js data-");
+        console.log(data);
+        result.value = {projectDetails: data, message: "Project Details fetched."};
+        if (data) {
+            result.code = 200;
+            callback(null, result);
+        }
+    }).catch(function (err) {
+        // just need one of these
+        console.log('error:', err.message);
+        result.value    = responseJSON("SERVER_someError");
+        result.code     = '400';
+        callback(err, result);
+    });
+}
+
+// Post Bids
+function handle_posting_bid(bidInfo, callback) {
+
+    let result = {};
+
+    let writeResult = Project.update(
+        { _id: bidInfo.project_id, "bids.username": bidInfo.username },
+        {
+            $set: {
+                "bids.$.bid_price"   : bidInfo.bid_price,
+                "bids.$.days_req"    : bidInfo.days_req,
+                "bids.$.name"        : bidInfo.name,
+                "bids.$.username"    : bidInfo.username
+            }
+        },
+        { "upsert": true },
+        function (err, doc) {
+            if (err) {
+
+                result.code     = "400";
+                result.value    = "Bid update failed";
+                console.log("###Error");
+                console.log(err);
+                // callback(err, res);
+            }
+
+            result.code = "200";
+            result.value = {bidUpdated: doc, message: "Bid updated successfully."};
+            console.log("###doc");
+            console.log(doc);
+            callback(null, result);
+        }
+    );
+
+    if(!writeResult.nModified) {
+        Project.update(
+            {
+                _id: bidInfo.project_id,
+                "bids.username": {
+                    $ne: bidInfo.username
+                }
+            },
+            {
+                "$push" : {
+                    "bids": {
+                        "bid_price"   : bidInfo.bid_price,
+                        "days_req"    : bidInfo.days_req,
+                        "name"        : bidInfo.name,
+                        "username"    : bidInfo.username
+                    }
+                }
+            },
+            { "upsert": true },
+            function (err, doc) {
+                if (err) {
+
+                    result.code = "400";
+                    result.value = "Bid update failed";
+                    console.log("###Error");
+                    console.log(err);
+                    callback(err, result);
+                }
+
+                result.code = "200";
+                result.value = {bidUpdated: doc, message: "Bid updated successfully."};
+                console.log("###doc");
+                console.log(doc);
+                callback(null, result);
+            }
+        )
+    }
+}
+
+// Submit Project
+function handle_submit_project(bidInfo, callback) {
+
+    let result = {};
+
+    Project.findOneAndUpdate(
+        {_id: bidInfo.id},
+        {
+            $set: {
+                "freelancer_files": bidInfo.filenames+",",
+                "status": 'Submitted'
+            }
+        },
+
+        function (err, doc) {
+            if (err) {
+
+                result.code  = "400";
+                result.value = "Freelancer cannot be set.";
+                console.log(res.value);
+                callback(err, res);
+            }
+
+            result.code  = "200";
+            result.value = doc;
+
+            console.log(doc);
+            callback(null, result);
+        }
+    );
+}
+
 // Project Response messages.
 function responseJSON(responseType) {
     switch (responseType) {
@@ -262,5 +477,9 @@ module.exports = {
     handle_open_project,
     handle_relevant_project,
     handle_published_project,
-    handle_bid_project
+    handle_bid_project,
+    handle_get_bids_project,
+    handle_project_details,
+    handle_posting_bid,
+    handle_submit_project
 };

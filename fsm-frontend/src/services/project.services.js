@@ -15,7 +15,8 @@ export const projectWebService = {
     fetchProjectDetailsWS,
     fetchBidHeaderDetailsWS,
     hireFreelancerWS,
-    postBidWS
+    postBidWS,
+    submitProjectWS
 };
 
 function postProject (project) {
@@ -61,6 +62,11 @@ function fetchProjectDetailsWS(projectId) {
 function fetchBidHeaderDetailsWS(projectId) {
     let bidHeaderDetailsUrl   = backendURL + '/project/bid-header-details?projectId=' + projectId;
     return axiosGet(bidHeaderDetailsUrl);
+}
+
+function submitProjectWS (project) {
+    let submitProjectUrl   = backendURL + '/project/submit-project';
+    return axiosPost(submitProjectUrl, project);
 }
 
 function userPublishedDetailsWS (username) {

@@ -15,6 +15,10 @@ const consumer_project_open         = connection.getConsumer('project_open_topic
 const consumer_project_relevant     = connection.getConsumer('project_relevant_topic');
 const consumer_project_published    = connection.getConsumer('project_published_details');
 const consumer_project_bids         = connection.getConsumer('project_bid_details');
+const consumer_project_get_bids     = connection.getConsumer('project_get_bid_details_topic');
+const consumer_project_details      = connection.getConsumer('project_project_details');
+const consumer_post_bid             = connection.getConsumer('project_post_bid');
+const consumer_submit_project       = connection.getConsumer('project_submit_project');
 
 const consumer_profile_info         = connection.getConsumer('profile_update_info');
 const consumer_profile_get_visitor  = connection.getConsumer('profile_fetch_visitor');
@@ -215,6 +219,106 @@ consumer_project_bids.on('message', function (message) {
     const data = JSON.parse(message.value);
 
     projectService.handle_bid_project(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_project_get_bids.on('message', function (message) {
+
+    console.log('Get Bid details message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    projectService.handle_get_bids_project(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_project_details.on('message', function (message) {
+
+    console.log('Fetch project details message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    projectService.handle_project_details(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_post_bid.on('message', function (message) {
+
+    console.log('Post bid message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    projectService.handle_posting_bid(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_submit_project.on('message', function (message) {
+
+    console.log('Submit project message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    projectService.handle_submit_project(data.data, function(err,result){
         let payloads = [{
             topic   : data.replyTo,
             messages: JSON.stringify

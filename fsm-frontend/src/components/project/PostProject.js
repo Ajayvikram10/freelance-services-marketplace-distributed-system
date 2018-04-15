@@ -86,7 +86,6 @@ class PostProject extends Component {
         let file    = this.state.projectFiles;
 
         skills = skills.trim().split(",");
-
         if (name && desc && skills) {
 
             let filenames = "";
@@ -113,12 +112,7 @@ class PostProject extends Component {
         const uploadFiles = new FormData();
         let filenames = "";
         for (let index = 0; index < files.length; index++) {
-            if(index === files.length-1) {
-                filenames = filenames.concat(files[index][0].name);
-            }
-            else {
-                filenames = filenames.concat(files[index][0].name + ",");
-            }
+            filenames = filenames.concat(files[index][0].name + ",");
             uploadFiles.append("file", files[index][0]);
         }
 

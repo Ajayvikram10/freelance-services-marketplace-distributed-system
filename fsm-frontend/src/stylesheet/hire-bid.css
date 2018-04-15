@@ -286,13 +286,13 @@
     transition-property: color;
     transition-timing-function: ease-out;
     width: 170.281px;
-    margin-bottom: 105%;
+    margin-bottom: 56%;
     -webkit-font-smoothing: antialiased;
 }
 
 #projectID {
-    margin-left: 100px;
-    margin-top: 15%;
+    /*margin-left: 100px;*/
+    /*margin-top: 15%;*/
 }
 
 .ProfileImageIcon {
@@ -340,4 +340,38 @@ table.bids tbody>tr:hover {
 .project-div {
     position: relative;
     min-height: 150px;
+}
+
+.row-bid-height {
+    height: 40px !important;
+}
+
+
+.file-upload-area-bid{
+    margin: 10px 10px 10px 10px;
+    padding: 15px 5px 15px 5px;
+    text-align: center;
+    border: 1px dashed #DEDEDE;
+    width: 100%;
+}
+
+.file-upload-box {
+    width: 100%;
+    justify-content: center;
+}
+
+.file-bid-margin {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.file-bid-btn {
+    justify-content: center;
+}
+
+#shadowPanel-bid {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-color: #ffffff;
+    margin-bottom: 5%;
 }

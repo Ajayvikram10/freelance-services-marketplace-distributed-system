@@ -151,7 +151,7 @@
 }
 
 .row-size {
-    margin-top: 7%;
+    margin-top: 4%;
     margin-right: 102px;
     margin-left: 48px
 }
@@ -439,7 +439,8 @@
 }
 
 .flip-height {
-    height: 0 !important;
+    /*height: 0 !important;*/
+    height: 40px !important;
     justify-content: center;
 }
 
@@ -500,10 +501,11 @@
 }
 
 .freelancer-toggle-home {
+    height: 38px !important;
     float: right;
     display: inline-block;
-    margin-top: 5%;
-    margin-bottom: 5%;
+    /*margin-top: 5%;*/
+    /*margin-bottom: 5%;*/
     border: 1px solid #BEC0C2;
     border-radius: 30px;
     margin-left: 50px;
