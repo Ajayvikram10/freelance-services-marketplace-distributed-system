@@ -11,6 +11,7 @@ import UserProfilePage              from "./components/user/UserProfilePage";
 import OtherProfilePage             from "./components/user/OtherProfilePage";
 import BidProject                   from "./components/project/BidProject";
 import HireProject                  from "./components/project/HireProject";
+import TransactionsPage             from "./components/transactions/TransactionsPage";
 import { connect }                  from "react-redux";
 import { userDispatch }             from "./redux/actions/user/user.dispatch";
 import Alert                        from 'react-s-alert';
@@ -19,6 +20,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 // optional
 import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import './App.css';
+
 
 
 class App extends Component {
@@ -69,6 +71,8 @@ class App extends Component {
                         { !isAuth ? <Route startsWith path="/bid-project" component={LoginPage}/> : <Route startsWith path="/bid-project" component={BidProject}/>}
 
                         { !isAuth ? <Route startsWith path="/hire-project" component={LoginPage}/> : <Route startsWith path="/hire-project" component={HireProject}/>}
+
+                        { !isAuth ? <Route startsWith path="/transaction" component={LoginPage}/> : <Route startsWith path="/transaction" component={TransactionsPage}/>}
 
                     </div>
                 </Router>

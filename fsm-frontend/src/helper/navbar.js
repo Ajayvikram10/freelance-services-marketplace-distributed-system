@@ -55,6 +55,12 @@ class NavBar extends Component {
                                 >
                                     <span className="nav-link nv-link">Profile</span>
                                 </li>
+                                <li
+                                    onClick = { this.handleNavSubmit.bind(this, "/transaction") }
+                                    className={`nav-item nv-itm ` + (currentPage === 'transaction' ? 'is-active' :'' )}
+                                >
+                                    <span className="nav-link nv-link">My Transactions</span>
+                                </li>
                             </ul>
                             <ul className="ul-list-style">
                                 <li className="nb-btn">
@@ -79,14 +85,6 @@ class NavBar extends Component {
 
 }
 
-// function mapStateToProps(state) {
-//
-//     const { alert } = state;
-//     return {
-//         alert
-//     };
-// }
-//
 function mapDispatchToProps(dispatch) {
     return {
         logout: () => dispatch(userDispatch.logout())

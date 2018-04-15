@@ -46,15 +46,17 @@ app.use(passport.initialize());
 app.use(passport.session()); //persistent login session
 
 // React Application Routes and Requests - < http://localhost:3001 >
-let index               = require('./routes/index');
-let userController      = require('./routes/userController');
-let projectController   = require('./routes/projectController');
-let profileController   = require('./routes/profileController');
+let index                   = require('./routes/index');
+let userController          = require('./routes/userController');
+let projectController       = require('./routes/projectController');
+let profileController       = require('./routes/profileController');
+let transactionController   = require('./routes/transactionController');
 
-app.use('/'         , index);
-app.use('/users'    , userController);
-app.use('/project'  , projectController);
-app.use('/profile'  , profileController);
+app.use('/'             , index);
+app.use('/users'        , userController);
+app.use('/project'      , projectController);
+app.use('/profile'      , profileController);
+app.use('/transaction'  , transactionController);
 // Project Controller
 // POST
 

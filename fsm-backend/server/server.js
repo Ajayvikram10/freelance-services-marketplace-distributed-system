@@ -4,6 +4,7 @@ const producer          = connection.getProducer();
 const userService       = require('../services/user/user.service');
 const projectService    = require('../services/project/project.service');
 const profileService    = require('../services/profile/profile.service');
+const transactionService= require('../services/transaction/transaction.service');
 
 // Consumers: [naming - consumer_service_topic]...Topics: [naming - service_function_topic]
 const consumer_user_register        = connection.getConsumer('user_register_topic');
@@ -23,6 +24,8 @@ const consumer_submit_project       = connection.getConsumer('project_submit_pro
 const consumer_profile_info         = connection.getConsumer('profile_update_info');
 const consumer_profile_get_visitor  = connection.getConsumer('profile_fetch_visitor');
 
+const consumer_transaction_details  = connection.getConsumer('transaction_user_details');
+const consumer_transaction_submit   = connection.getConsumer('transaction_submit_details');
 // Server and Database Logs
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB Connection error: '));
@@ -372,6 +375,57 @@ consumer_profile_get_visitor.on('message', function (message) {
     const data = JSON.parse(message.value);
 
     profileService.handle_visitor_profile(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+// ************** Transaction **************
+consumer_transaction_details.on('message', function (message) {
+
+    console.log('Fetch user transaction details message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    transactionService.handle_user_transaction(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_transaction_submit.on('message', function (message) {
+
+    console.log('Submit user transaction details message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    transactionService.handle_make_transaction(data.data, function(err,result){
         let payloads = [{
             topic   : data.replyTo,
             messages: JSON.stringify

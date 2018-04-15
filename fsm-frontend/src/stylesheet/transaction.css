@@ -1,0 +1,13 @@
+.pf-modal-btn-pad-transaction {
+    display: block;
+    height: auto !important;
+    padding: 35px 0 0 !important;
+    width: 100%;
+}
+
+#shadowPanel-bid-transaction {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-color: #ffffff;
+    margin-bottom: 10%;
+}
