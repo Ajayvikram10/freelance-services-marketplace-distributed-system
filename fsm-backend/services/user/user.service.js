@@ -15,7 +15,7 @@ function handle_register_request(registrationInfo, callback){
             result.code = 200;
             result.value = responseJSON("REG_successMsg");
             callback(null, result);
-        }, (err) => {
+        }).catch((err) => {
             // Connection Failed or Model not valid.
             if(err.code === 11000) {
                 if(err.errmsg.match(/username_1/g) == "username_1"){
