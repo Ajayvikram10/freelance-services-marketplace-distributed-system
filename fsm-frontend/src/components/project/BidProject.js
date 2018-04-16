@@ -410,7 +410,7 @@ class BidProject extends Component {
                                             {
                                                 this.state.filenames.map((data) =>
                                                     <div key={data}>
-                                                        <a target="_blank" href={`http://localhost:3000/project_files/${this.state.project_details._id.emp_username}/${data}`}>
+                                                        <a target="_blank" href={`/project_files/${this.state.project_details._id.emp_username}/${data}`}>
                                                             {data}
                                                         </a>
                                                         <br/>
