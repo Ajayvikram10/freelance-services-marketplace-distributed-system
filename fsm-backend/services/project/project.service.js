@@ -1,4 +1,5 @@
 const Project   = require('../../database/mongo/models/project');
+const User      = require('../../database/mongo/models/user');
 const mongoose  = require('../../database/mongo/mongoose');
 
 // Post Project
@@ -185,6 +186,9 @@ function handle_published_project(publishedProjects, callback) {
 function handle_bid_project(bidProjectFetch, callback) {
 
     let result = {};
+
+    console.log("-->");
+    console.log(bidProjectFetch.user);
 
     let pipeline = [
         {
@@ -427,33 +431,67 @@ function handle_posting_bid(bidInfo, callback) {
 }
 
 // Submit Project
-function handle_submit_project(bidInfo, callback) {
+function handle_submit_project(submitInfo, callback) {
 
     let result = {};
 
     Project.findOneAndUpdate(
-        {_id: bidInfo.id},
+        {_id: submitInfo.id},
         {
             $set: {
-                "freelancer_files": bidInfo.filenames+",",
-                "status": 'Submitted'
+                "freelancer_files": submitInfo.filenames+",",
+                "status": 'SUBMITTED'
             }
         },
 
         function (err, doc) {
             if (err) {
 
-                result.code  = "400";
+                result.code  = 400;
                 result.value = "Freelancer cannot be set.";
-                console.log(res.value);
-                callback(err, res);
+                console.log(result.value);
+                callback(err, result);
             }
 
-            result.code  = "200";
+            result.code  = 200;
             result.value = doc;
 
             console.log(doc);
             callback(null, result);
+        }
+    );
+}
+
+// Hire Freelancer
+function handle_hire_freelancer(hireInfo, callback) {
+
+    let result = {};
+
+
+    Project.findOneAndUpdate(
+        { _id: hireInfo.project_id },
+        {
+            $set: {
+                "freelancer_username"   : hireInfo.freelancer_username,
+                "status"                : 'ASSIGNED'
+            }
+        },
+        { new: true },
+        function (err, doc) {
+            if (err) {
+
+                result.code     = 400;
+                result.value    = "Hiring freelancer failed";
+                console.log(result.value);
+                callback(err, result);
+            }
+
+            User.findOne({username: doc.freelancer_username}, function (err, user) {
+                result.code     = 200;
+                result.value    = user;
+                console.log(user);
+                callback(null, result);
+            })
         }
     );
 }
@@ -481,5 +519,6 @@ module.exports = {
     handle_get_bids_project,
     handle_project_details,
     handle_posting_bid,
-    handle_submit_project
+    handle_submit_project,
+    handle_hire_freelancer
 };

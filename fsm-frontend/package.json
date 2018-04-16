@@ -41,6 +41,10 @@
     "/profile_images": {
       "target": "http://localhost:3000",
       "ws": true
+    },
+    "/project_files": {
+      "target": "http://localhost:3000",
+      "ws": true
     }
   }
 }

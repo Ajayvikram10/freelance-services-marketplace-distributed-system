@@ -9,6 +9,7 @@ require('./resources/middleware/passport')(passport);
 
 // MongoDB Sessions Setup
 let mongoSessionURL = "mongodb://localhost:27017/sessions";
+// let mongoSessionURL = "mongodb://suhas:suhas@ds119772.mlab.com:19772/freelancerdb";
 let expressSessions = require("express-session");
 let mongoStore      = require("connect-mongo/es5")(expressSessions);
 
@@ -60,13 +61,6 @@ app.use('/transaction'  , transactionController);
 // Project Controller
 // POST
 
-// app.post('/project/hire-freelancer', authenticate, projectController.hireFreelancer);
-
-// GET
-// app.get('/project/published-projects', authenticate, projectController.publishedProjects);
-// app.get('/project/bid-projects', authenticate, projectController.bidProjects);
-// app.get('/project/project-details', authenticate, projectController.projectDetails);
-// app.get('/project/bid-header-details', authenticate, projectController.bidHeaderDetails);
 
 // Catch 404 and Forward to Error Handler
 app.use(function(req, res, next) {

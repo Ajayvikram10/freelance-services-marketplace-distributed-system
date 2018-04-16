@@ -10,6 +10,7 @@ import plusIcon             from '../../images/freelancer.logos/plus_icon.png';
 import uploadIcon           from '../../images/freelancer.logos/upload_file.png';
 import filesize             from "filesize";
 import Dropzone             from 'react-dropzone';
+import Alert from "react-s-alert";
 
 class BidProject extends Component {
 
@@ -233,8 +234,12 @@ class BidProject extends Component {
         projectWebService.submitProjectWS(project)
             .then(
                 response => {
-                    console.log(response.data.message);
-                    window.alert(response.data.message);
+                    Alert.info("Submitted", {
+                        effect: 'jelly',
+                        timeout: 1500,
+                        offset: 50
+                    });
+                    history.push("/dashboard");
                 });
     };
 
@@ -260,6 +265,10 @@ class BidProject extends Component {
     };
 
     render() {
+
+        console.log("project_details");
+        console.log(this.state.project_details._id.status);
+
         return (
             <div>
                 <NavBar />
@@ -269,7 +278,6 @@ class BidProject extends Component {
                             <span className="ProjectTitleBid"> {this.state.project_details._id.title}</span>
                         </div>
                     </div>
-                    {/*<div className="col-sm-8 offset-sm-2">*/}
                     <div className = "">
                         <div className="">
                             <div className = "row ml-0 mr-0">
@@ -464,7 +472,7 @@ class BidProject extends Component {
                                         this.state.bid_table_data.map((data) =>
                                             <tr key={data._id + data.bids.username}>
                                                 <td><img alt="Profile" className="ProfileImageIcon"
-                                                         src={`http://localhost:3000/profile_images/${data.bids.username}.jpg`}
+                                                         src={`/profile_images/${data.bids.username}/${data.bids.username}.jpg`}
                                                          onError={(e) => {
                                                              e.target.src = profile_image
                                                          }}/></td>
@@ -485,7 +493,9 @@ class BidProject extends Component {
                             </div>
                             }
 
-                            {this.state.freelancer_assigned &&
+                            {
+                                this.state.freelancer_assigned &&
+                                this.state.project_details._id.status !== "CLOSED" &&
                             <div className="row ml-0 mr-0">
                                 <div className="col-md-12">
                                     <div className="panel panel-primary" id="shadowPanel-bid">

@@ -181,6 +181,10 @@ class UserProfilePage extends Component {
         const user  = this.props.userDetails.user;
         const { isEdit, aboutMeEdit, summaryEdit, profileImage, nameEdit, phoneEdit } = this.state;
 
+        console.log("prfol");
+        console.log(profileImage);
+        console.log("prfol");
+
         return (
             <div className="main-content">
                 <NavBar currentPage={"profile"}/>

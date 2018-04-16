@@ -360,7 +360,7 @@ class TransactionsPage extends Component {
 
                                 {
                                     this.state.my_transaction_details_status &&
-                                    <div className="panel panel-primary" id="shadowPanel-bid-transaction">
+                                    <div className="panel panel-primary" id="shadowPanel-bid">
                                         <table>
                                             <thead>
                                             <tr>
@@ -392,7 +392,7 @@ class TransactionsPage extends Component {
 
                                 {
                                     !this.state.my_transaction_details_status &&
-                                    <div className="panel panel-primary" id="shadowPanel-bid-transaction">
+                                    <div className="panel panel-primary" id="shadowPanel-bid">
                                         <p>No Transactions yet</p>
                                     </div>
                                 }

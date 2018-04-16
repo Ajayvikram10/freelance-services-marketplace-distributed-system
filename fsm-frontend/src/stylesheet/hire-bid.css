@@ -334,7 +334,7 @@ table.bids tbody>tr:hover {
     bottom: 5px !important;
     left: 0;
     margin-left: 100px;
-    margin-top: 15%;
+    margin-top: 10%;
 }
 
 .project-div {
@@ -374,4 +374,33 @@ table.bids tbody>tr:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-color: #ffffff;
     margin-bottom: 5%;
+}
+
+.hm-content-title-hire {
+    width: 20%;
+    background: #4D525B;
+    border-color: #4D525B;
+    padding: 20px 100px 20px 0px;
+    font-size: 13px;
+    font-size: .8125rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-align: center;
+    color: #F7F7F7;
+    border-radius: 3px 0 0 0;
+}
+
+.hm-content-budget-hire {
+    border-radius: 0 3px 0 0;
+    width: 30%;
+    background: #4D525B;
+    border-color: #4D525B;
+    padding: 20px 21px 20px 50px;
+    font-size: 13px;
+    font-size: .8125rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-align: left;
+    color: #F7F7F7;
+    align-content: center;
 }

@@ -1,5 +1,6 @@
 const  _            = require('lodash');
 const Transaction   = require('../../database/mongo/models/transaction');
+const Project       = require('../../database/mongo/models/project');
 
 // Fetch User transactions
 function handle_user_transaction(userInfo, callback){
@@ -28,6 +29,8 @@ function handle_make_transaction(transactionInfo, callback){
 
     let result  = {};
 
+    console.log(transactionInfo);
+
     let date    = new Date().getDate();
     let month   = new Date().getMonth() + 1;
     let year    = new Date().getFullYear();
@@ -48,6 +51,32 @@ function handle_make_transaction(transactionInfo, callback){
         console.log(data);
         result.value = { makeTransaction : data, message: 'Transaction successful'};
         result.code = 200;
+
+        if (transactionInfo.type === "Transfer") {
+            Project.findOneAndUpdate(
+                {_id: transactionInfo.project},
+                {
+                    $set: {
+                        "status": 'CLOSED'
+                    }
+                },
+                function (err, doc) {
+                    if (err) {
+
+                        result.code = 400;
+                        result.value = "Cannot update at the moment";
+                        console.log(result.value);
+                        callback(err, result);
+                    }
+                    else {
+                        callback(null, result);
+                    }
+
+
+                }
+            );
+        }
+
         callback(null, result);
     })
         .catch(function (err) {

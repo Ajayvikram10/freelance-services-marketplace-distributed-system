@@ -20,6 +20,7 @@ const consumer_project_get_bids     = connection.getConsumer('project_get_bid_de
 const consumer_project_details      = connection.getConsumer('project_project_details');
 const consumer_post_bid             = connection.getConsumer('project_post_bid');
 const consumer_submit_project       = connection.getConsumer('project_submit_project');
+const consumer_hire_freelancer      = connection.getConsumer('project_hire_freelancer');
 
 const consumer_profile_info         = connection.getConsumer('profile_update_info');
 const consumer_profile_get_visitor  = connection.getConsumer('profile_fetch_visitor');
@@ -322,6 +323,31 @@ consumer_submit_project.on('message', function (message) {
     const data = JSON.parse(message.value);
 
     projectService.handle_submit_project(data.data, function(err,result){
+        let payloads = [{
+            topic   : data.replyTo,
+            messages: JSON.stringify
+            ({
+                correlationId: data.correlationId,
+                data: result
+            }),
+            partition: 0
+        }];
+        producer.send(payloads, function(err, data){
+            console.log(data);
+            console.log();
+        });
+        return;
+    });
+});
+
+consumer_hire_freelancer.on('message', function (message) {
+
+    console.log('Hire freelancer message received.');
+    console.log(JSON.stringify(message.value));
+
+    const data = JSON.parse(message.value);
+
+    projectService.handle_hire_freelancer(data.data, function(err,result){
         let payloads = [{
             topic   : data.replyTo,
             messages: JSON.stringify

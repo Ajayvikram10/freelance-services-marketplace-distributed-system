@@ -39,7 +39,7 @@ class DashboardPage extends Component {
             });
         });
 
-        projectDispatch.userBidDetailsAction(user.user_id).then((userBidProjects) => {
+        projectDispatch.userBidDetailsAction(user.username).then((userBidProjects) => {
             this.setState({
                 bidDetailsStatus    : userBidProjects ? userBidProjects.bidDetailsStatus : false,
                 bidDetails          : userBidProjects ? userBidProjects.bidDetails : [],
@@ -232,6 +232,12 @@ class DashboardPage extends Component {
             );
         });
 
+        console.log('console.log(currentBidProjects);');
+        console.log(currentBidProjects);
+
+        console.log('console.log(currentPublishedProjects);');
+        console.log(currentPublishedProjects);
+
         return (
             <div className="main-content">
 
@@ -275,7 +281,8 @@ class DashboardPage extends Component {
                                     options     = {[
                                         { value: 'OPEN', label: 'OPEN' },
                                         { value: 'ASSIGNED', label: 'ASSIGNED' },
-                                        { value: 'CLOSED', label: 'CLOSED' }
+                                        { value: 'SUBMITTED', label: 'SUBMITTED' },
+                                        { value: 'CLOSED', label: 'CLOSED' },
                                     ]}
                                 />
                             </div>
@@ -368,7 +375,11 @@ class DashboardPage extends Component {
                                                 {
                                                     currentPublishedProjects.map((data) =>
                                                         <tr key={data.id}>
-                                                            <td className="db-content-td">{data.title}</td>
+                                                            <td className="db-content-td">
+                                                                <a href={`/hire-project?project_id=${data.id}`}>
+                                                                    { data.title }
+                                                                </a>
+                                                            </td>
                                                             <td className="db-content-td">{data.avg_bid}</td>
                                                             <td className="db-content-td">{data.freelancer_username}
                                                                 {
@@ -462,11 +473,15 @@ class DashboardPage extends Component {
 
                                                 {
                                                     currentBidProjects.map((data) =>
-                                                        <tr key={data.id}>
-                                                            <td className="db-content-td">{data.title}</td>
+                                                        <tr key={data._id}>
+                                                            <td className="db-content-td">
+                                                                <a href={`/bid-project?project_id=${data._id}`}>
+                                                                    {data.title}
+                                                                </a>
+                                                            </td>
                                                             <td className="db-content-td">{data.emp_username}</td>
                                                             <td className="db-content-td">{data.avg_bid}</td>
-                                                            <td className="db-content-td">{data.bid_price}</td>
+                                                            <td className="db-content-td">{data.bids.bid_price}</td>
                                                             <td className="db-content-td">{data.status}</td>
                                                         </tr>
                                                     )

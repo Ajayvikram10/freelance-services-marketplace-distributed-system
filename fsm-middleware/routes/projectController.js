@@ -6,6 +6,16 @@ const        kafka                  = require('../resources/kafka/client');
 const { authenticationMiddleware }  = require('../resources/middleware/session-authenticator');
 const   { uploadProjectFiles }      = require('../resources/middleware/file.storage');
 
+// nodemailer for mailing service
+const   nodemailer                  = require('nodemailer');
+const   transporter                 = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'info.cmpe273.lab2@gmail.com',
+            pass: 'cmpe273lab2'
+        }
+});
+
 // Post Project - POST '/post-project'
 router.post('/post-project', authenticationMiddleware(), function(req,res) {
 
@@ -109,45 +119,38 @@ router.post('/submit-project', authenticationMiddleware(), function(req,res) {
 });
 
 
+// Hire Project Page - Hire freelancer  - POST '/project/hire-freelancer'
+router.post('/hire-freelancer', authenticationMiddleware(), function(req,res) {
 
-// // HIRE FREELANCER - POST '/hire-freelancer'
-// exports.hireFreelancer = function hireFreelancer(req, res) {
-//
-//     console.log('here');
-//     console.log(req);
-//
-//     let hireFreelancerQ ="UPDATE `freelancerdb`.`projects` SET `status`='Assigned',`freelancer_username`='"+req.body.freelancer_username+"' WHERE `project_id`='"+req.body.project_id+"';";
-//
-//     if(DATABASE_POOL) {
-//         mysql.pool.getConnection(function (err, connection) {
-//
-//             if (err) {
-//                 console.log(err);
-//                 return res.status(400).send(responseJSON("SERVER_someError"));
-//             }
-//             // if you got a connection...
-//             connection.query(hireFreelancerQ, function (err, rows) {
-//                 if (err) {
-//                     connection.release();
-//                     return res.status(400).send(responseJSON("SERVER_someError"));
-//                 }
-//                 // Hire Freelancer updated successfully.
-//                 res.status(200).send({freelancerDetails: rows, message: "Hire Freelancer updated successfully."});
-//
-//                 // Release the connection
-//                 connection.release();
-//             });
-//         });
-//     } else {
-//         mysql.fetchData(function (err, rows) {
-//             if (err) {
-//                 return res.status(400).send(responseJSON("SERVER_someError"));
-//             }
-//             // Hire Freelancer updated successfully.
-//             res.status(200).send({freelancerDetails: rows, message: "Hire Freelancer updated successfully."});
-//         }, hireFreelancerQ);
-//     }
-// }
+    let hireDetails = _.pick(req.body, ['freelancer_username', 'project_id']);
+    _.assign(hireDetails, { "username"  : req.session.user });
+
+    kafka.make_request('project_hire_freelancer', hireDetails, function(err,results){
+        if(err){
+            return res.status(500).send(responseJSON("SERVER_someError"));
+        } else {
+            if (results.code === 200) {
+                //success case
+                let mailOptions = {
+                    from        : 'info.cmpe273.lab2@gmail.com',
+                    to          : results.value.email,
+                    subject     : 'Congratulations Freelancer! \nYou have been hired.',
+                    text        : 'You have been hired for project ID \nProjectID: ' + req.body.project_id
+                    + 'Log into your Freelancer account for more details!',
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }
+            return res.status(results.code).send(results.value);
+        }
+    });
+});
 
 router.get('/published-projects', authenticationMiddleware(), function(req,res) {
 
@@ -165,6 +168,9 @@ router.get('/published-projects', authenticationMiddleware(), function(req,res) 
 router.get('/bid-projects', authenticationMiddleware(), function(req,res) {
 
     let bidProjectDetails = _.pick(req.query, ['user']);
+
+    console.log("--->");
+    console.log(bidProjectDetails.user);
 
     kafka.make_request('project_bid_details', bidProjectDetails, function(err,results){
         if(err){
