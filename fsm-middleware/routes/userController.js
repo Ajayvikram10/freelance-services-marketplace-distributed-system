@@ -30,7 +30,7 @@ router.post('/login', function (req, res) {
                 case 401:
                     return res.status(401).send(err.message);   // Invalid password
                 case 404:
-                    return res.status(401).send(err.message);   // User doesn't exist
+                    return res.status(404).send(err.message);   // User doesn't exist
                 default:
                     return res.status(500).send(responseJSON("SERVER_someError"));
             }
