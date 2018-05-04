@@ -39,11 +39,11 @@
   },
   "proxy": {
     "/profile_images": {
-      "target": "http://18.188.91.5:3000",
+      "target": "http://localhost:3000",
       "ws": true
     },
     "/project_files": {
-      "target": "http://18.188.91.5:3000",
+      "target": "http://localhost:3000",
       "ws": true
     }
   }

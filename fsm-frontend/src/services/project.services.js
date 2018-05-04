@@ -1,7 +1,6 @@
 import axios    from 'axios';
 
-// const backendURL = 'http://localhost:3000';
-const backendURL = 'http://18.188.91.5:3000';
+const backendURL = 'http://localhost:3000';
 
 axios.defaults.withCredentials = true;
 

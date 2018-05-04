@@ -8,8 +8,7 @@ let passport        = require('passport');
 require('./resources/middleware/passport')(passport);
 
 // MongoDB Sessions Setup
-// let mongoSessionURL = "mongodb://localhost:27017/sessions";
-let mongoSessionURL = "mongodb://suhas:suhas@ds119772.mlab.com:19772/freelancerdb";
+let mongoSessionURL = "mongodb://localhost:27017/sessions";
 let expressSessions = require("express-session");
 let mongoStore      = require("connect-mongo/es5")(expressSessions);
 
@@ -22,7 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs'); //set up ejs for template
 
 app.use(logger('dev')); //log every request to the console
-app.use(cors({ origin: 'http://18.188.91.5:3001', credentials: true }));  // CORS Setup
+app.use(cors({ origin: 'http://localhost:3001', credentials: true }));  // CORS Setup
 
 // Environment Setup
 app.use(bodyParser.json()); // to support JSON-encoded bodies
